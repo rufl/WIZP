@@ -1,0 +1,50 @@
+{
+  "extensionId": "vscjava.vscode-gradle",
+  "lane": "language/tooling",
+  "rank": 16,
+  "referenceHost": "MrCode",
+  "scenarios": [
+    {
+      "actions": [
+        "Open Gradle explorer",
+        "Refresh",
+        "Run safe task",
+        "Cancel task",
+        "Run missing-Gradle path"
+      ],
+      "activationEvents": [
+        "workspaceContains:build.gradle"
+      ],
+      "backlogIds": [
+        "T20V-027"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "treeNodes",
+        "taskOutput",
+        "terminalMetadata",
+        "refreshState",
+        "cancellation",
+        "messages",
+        "processAudit"
+      ],
+      "viewProbeIds": [
+        "gradleTasksView",
+        "gradleDefaultProjectsView",
+        "recentTasksView",
+        "gradleDaemonsView"
+      ],
+      "fixture": "fixtures/java/gradle-project",
+      "id": "gradle-explorer-tasks",
+      "kind": "tasks-tree",
+      "runtimeModes": [
+        "valid-runtime",
+        "missing-runtime"
+      ],
+      "settings": {},
+      "title": "Verify Gradle explorer, tasks, daemon controls, and refresh"
+    }
+  ],
+  "schema": "wizp.top20-behavior-scenario.v1",
+  "version": "3.17.3"
+}

@@ -1,0 +1,76 @@
+%YAML 1.2
+---
+name: JavaScript
+file_extensions:
+  - js
+  - jsx
+  - mjs
+  - cjs
+scope: source.js
+variables:
+  ident: '[a-zA-Z_$][a-zA-Z0-9_$]*'
+contexts:
+  main:
+    - match: //[^\n]*
+      scope: comment.line.double-slash.js
+    - match: /\*
+      scope: comment.block.js
+      push:
+        - match: \*/
+          scope: comment.block.js
+          pop: true
+    - match: '"'
+      scope: string.quoted.double.js
+      push: string-double
+    - match: "'"
+      scope: string.quoted.single.js
+      push: string-single
+    - match: '`'
+      scope: string.template.js
+      push: string-template
+    - match: '\b(if|else|while|for|do|switch|case|break|continue|return|throw|try|catch|finally|new|delete|typeof|instanceof|in|of|class|extends|super|import|export|default|from|as|async|await|yield|function|var|let|const|debugger|with|static|get|set)\b'
+      scope: keyword.control.js
+    - match: '\b(true|false|null|undefined|NaN|Infinity|this|arguments|globalThis)\b'
+      scope: constant.language.js
+    - match: '\b([0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?|0[xX][0-9a-fA-F]+|0[oO][0-7]+|0[bB][01]+)\b'
+      scope: constant.numeric.js
+    - match: '\b(console|Math|JSON|Promise|Array|Object|String|Number|Boolean|RegExp|Date|Map|Set|Symbol|Error|parseInt|parseFloat|isNaN|isFinite|eval|encodeURIComponent|decodeURIComponent)\b'
+      scope: support.function.js
+    - match: '\b(Error|TypeError|SyntaxError|ReferenceError|RangeError|URIError|EvalError)\b'
+      scope: support.class.js
+    - match: '{{ident}}\s*(?=\()'
+      scope: entity.name.function.js
+    - match: '\b{{ident}}\b'
+      scope: variable.other.js
+    - match: '[+\-*/%&|^~!<>=?:;,.(){}[\]]+'
+      scope: keyword.operator.js
+  string-double:
+    - meta_scope: string.quoted.double.js
+    - match: '\\.'
+      scope: constant.character.escape.js
+    - match: '"'
+      scope: string.quoted.double.js
+      pop: true
+  string-single:
+    - meta_scope: string.quoted.single.js
+    - match: '\\.'
+      scope: constant.character.escape.js
+    - match: "'"
+      scope: string.quoted.single.js
+      pop: true
+  string-template:
+    - meta_scope: string.template.js
+    - match: '\\.'
+      scope: constant.character.escape.js
+    - match: '\$\{'
+      scope: punctuation.definition.template-expression.js
+      push: template-expression
+    - match: '`'
+      scope: string.template.js
+      pop: true
+  template-expression:
+    - meta_scope: meta.template.expression.js
+    - match: '\}'
+      scope: punctuation.definition.template-expression.js
+      pop: true
+    - include: main

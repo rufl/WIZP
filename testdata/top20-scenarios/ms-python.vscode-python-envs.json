@@ -1,0 +1,72 @@
+{
+  "extensionId": "ms-python.vscode-python-envs",
+  "lane": "general extension",
+  "rank": 5,
+  "referenceHost": "MrCode",
+  "scenarios": [
+    {
+      "actions": [
+        "Discover environments",
+        "Select environment",
+        "Inspect status",
+        "Open terminal"
+      ],
+      "activationEvents": [
+        "onLanguage:python"
+      ],
+      "backlogIds": [
+        "T20V-012"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "environmentList",
+        "selectedEnvironment",
+        "statusItem",
+        "settingsCompletions",
+        "terminalEnv"
+      ],
+      "frontendProbeRequired": true,
+      "fixture": "fixtures/python/env-manager",
+      "id": "python-envs-manager-discovery",
+      "kind": "environment",
+      "runtimeModes": [
+        "valid-runtime"
+      ],
+      "settings": {},
+      "title": "Verify environment manager discovery and selection"
+    },
+    {
+      "actions": [
+        "Activate",
+        "Run environment commands",
+        "Capture messages"
+      ],
+      "activationEvents": [
+        "onLanguage:python"
+      ],
+      "backlogIds": [
+        "T20V-013"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "messages",
+        "outputLogs",
+        "disabledCommands",
+        "processAudit",
+        "networkAudit"
+      ],
+      "fixture": "fixtures/python/no-interpreter",
+      "id": "python-envs-degraded",
+      "kind": "degraded-runtime",
+      "runtimeModes": [
+        "missing-runtime"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/tmp/wizp-missing-python"
+      },
+      "title": "Verify interpreter-less degraded UX"
+    }
+  ],
+  "schema": "wizp.top20-behavior-scenario.v1",
+  "version": "1.34.0"
+}

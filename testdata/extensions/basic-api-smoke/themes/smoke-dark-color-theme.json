@@ -1,0 +1,15 @@
+{
+  "name": "Smoke Dark",
+  "type": "dark",
+  "colors": {
+    "editor.background": "#101112"
+  },
+  "tokenColors": [
+    {
+      "scope": "keyword.control.smoke",
+      "settings": {
+        "foreground": "#ffcc66"
+      }
+    }
+  ]
+}

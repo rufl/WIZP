@@ -1,0 +1,74 @@
+{
+  "extensionId": "devsense.composer-php-vscode",
+  "lane": "debug/tooling",
+  "rank": 6,
+  "referenceHost": "MrCode",
+  "scenarios": [
+    {
+      "actions": [
+        "Validate composer.json",
+        "Run safe install/update dry path",
+        "Capture output"
+      ],
+      "activationEvents": [
+        "workspaceContains:composer.json"
+      ],
+      "backlogIds": [
+        "T20V-014"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "commandInvocations",
+        "outputChannel",
+        "terminalOutput",
+        "errorParsing",
+        "processAudit"
+      ],
+      "fixture": "fixtures/php/composer-valid",
+      "id": "composer-valid-commands",
+      "kind": "command",
+      "runtimeModes": [
+        "valid-runtime"
+      ],
+      "settings": {
+        "composer.bin": "${fixtureTools}/composer",
+        "php.executablePath": "${fixtureTools}/php"
+      },
+      "title": "Verify Composer commands against a hermetic Composer fixture"
+    },
+    {
+      "actions": [
+        "Activate workspace",
+        "Dismiss notification",
+        "Open settings action"
+      ],
+      "activationEvents": [
+        "workspaceContains:composer.json"
+      ],
+      "backlogIds": [
+        "T20V-015"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "notifications",
+        "actionButtons",
+        "settingsIntent",
+        "telemetryAudit",
+        "processAudit"
+      ],
+      "fixture": "fixtures/php/composer-missing",
+      "id": "composer-missing-tools",
+      "kind": "degraded-runtime",
+      "runtimeModes": [
+        "missing-runtime"
+      ],
+      "settings": {
+        "composer.bin": "/tmp/wizp-missing-composer",
+        "php.executablePath": "/tmp/wizp-missing-php"
+      },
+      "title": "Verify missing Composer/PHP degraded behavior"
+    }
+  ],
+  "schema": "wizp.top20-behavior-scenario.v1",
+  "version": "1.70.18966"
+}

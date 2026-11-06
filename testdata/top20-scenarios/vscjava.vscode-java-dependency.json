@@ -1,0 +1,45 @@
+{
+  "extensionId": "vscjava.vscode-java-dependency",
+  "lane": "general extension",
+  "rank": 4,
+  "referenceHost": "MrCode",
+  "scenarios": [
+    {
+      "actions": [
+        "Open Java project explorer",
+        "Refresh dependencies",
+        "Reveal dependency node",
+        "Open source"
+      ],
+      "activationEvents": [
+        "workspaceContains:pom.xml",
+        "workspaceContains:build.gradle"
+      ],
+      "backlogIds": [
+        "T20V-007"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "treeNodes",
+        "refreshState",
+        "commands",
+        "messages",
+        "processAudit"
+      ],
+      "viewProbeIds": [
+        "javaProjectExplorer"
+      ],
+      "fixture": "fixtures/java/dependency-maven-gradle",
+      "id": "java-dependency-explorer",
+      "kind": "tree-view",
+      "runtimeModes": [
+        "valid-runtime",
+        "missing-jdk"
+      ],
+      "settings": {},
+      "title": "Verify Java dependency and project explorer"
+    }
+  ],
+  "schema": "wizp.top20-behavior-scenario.v1",
+  "version": "0.27.5"
+}

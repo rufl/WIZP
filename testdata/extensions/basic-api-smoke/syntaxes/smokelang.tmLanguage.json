@@ -1,0 +1,9 @@
+{
+  "scopeName": "source.smoke",
+  "patterns": [
+    {
+      "match": "\\b(smoke|ember)\\b",
+      "name": "keyword.control.smoke"
+    }
+  ]
+}

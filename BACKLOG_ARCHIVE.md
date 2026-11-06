@@ -1,0 +1,218 @@
+# wizp Backlog Archive
+
+## Archive Policy
+
+`BACKLOG_ARCHIVE.md` keeps completed, retired, disproven, or imported historical planning rows out of the active backlog. Do not use this file as the current queue; move only work with evidence or claims that should no longer steer active planning.
+
+## Initial OVERZEER Audit Baseline
+
+- Bootstrap date: 2026-07-07
+- Project path: `desktop/WIZP/wizp`
+- Stack signals: Zig, Node/JS, Svelte, Rust, Python
+- Source scan: `624` source files, `223885` source lines, `188` test files
+- Largest source file: `scripts/top20_behavior_parity_smoke.py` at `19923` lines
+- Existing root control docs before bootstrap: BACKLOG.md=no, BACKLOG_ARCHIVE.md=no, CHANGELOG.md=yes, MEMORY.md=no, ROADMAP.md=no
+- Verification boundary: Detected a maintained local verification gate from project files.
+
+## Completed Work
+
+- [2026-07-12][P1][QOL][UX] In-app dirty-file close protection.
+  - Delivered Save / Discard / Cancel dialog for tab close, middle-click, keyboard close, context-menu close, close-others, close-all, close-to-right, and group close paths.
+  - Save closes only after the target write clears the dirty flag; failed saves keep the tab open and report an error.
+  - Evidence: `npm run build` in `frontend/`, `npm run lint` (0 errors), `npm run format:check`, `npm run test:parity:frontend`, and live native asset/runtime startup on `http://127.0.0.1:9876`.
+- [2026-07-12][P1][QOL][UX] Focused status-bar pickers.
+  - Delivered language, indentation, encoding, and EOL popovers; language and indentation apply to the active Monaco editor, while all selections persist through `wizp-settings`.
+  - Evidence: `npm run build` in `frontend/`, `npm run lint` (0 errors), `npm run format:check`, `npm run test:parity:frontend`, and live native asset/runtime startup on `http://127.0.0.1:9876`.
+- [2026-07-12][P2][QOL][WORKSPACE] Restore bounded editor session state.
+  - Delivered local `wizp:editorSession:v1` persistence for clean file tabs, active group, active tab, split orientation, and valid-file-only restore. Missing/unreadable files are skipped without blocking startup; webviews and dirty unsaved buffers are excluded.
+  - Evidence: frontend build/lint/format, `npm run test:parity:frontend`, backend build, Electrobun package build, and live native startup serving the new bundle.
+- [2026-07-12][P2][QOL][TERMINAL] Add terminal rerun and lifecycle/character polish.
+  - Delivered rerun-last-command toolbar/context actions, command tracking for typed and task-injected commands, starting/ready/exited/killed/error indicators, and output sanitization that removes stray NUL/C0 bytes while preserving printable data and ANSI controls.
+  - Evidence: `python3 scripts/check_terminal_resource_report.py` (`observed=16777216`, `dropped=3222971`), `npm run test:parity:frontend`, frontend lint/format, backend build, Electrobun package build, and live native terminal startup.
+- [2026-07-12][P1][TEST][BUILD] Add a named backend check gate.
+  - Delivered `zig build check` and `npm run check`, owning Zig tests and `zig fmt --check src/` while keeping broader frontend/parity/package proof in `npm run verify`.
+  - Evidence: `npm run check` passed after implementation.
+- [2026-07-12][P2][DOCS] Tailor project memory and roadmap truth.
+  - Delivered current WIZP commands, toolchain, proof boundaries, QOL baseline, release blockers, and the known extension-host caveat in `MEMORY.md` and `ROADMAP.md`.
+  - Evidence: direct doc review plus `npm run check` and existing focused frontend/native gates.
+- [2026-07-13][P2][SEC][BUILD] Make dependency drift reviewable.
+  - Delivered `npm run audit:dependencies`, auditing both committed root/frontend lockfiles at high severity, plus the existing dependency consistency check.
+  - Evidence: both npm audit trees reported `found 0 vulnerabilities`; `npm run check:dependencies` passed.
+- [2026-07-13][P2][SEC][DOCS] Document WIZP security and reporting boundaries.
+  - Delivered `SECURITY.md` covering untrusted inputs, default-deny/lazy network policy, dependency updates, generated evidence, terminal bytes, and sanitized private reporting.
+  - Evidence: direct policy review and `npm run report:network-policy` reported `policy-verified`.
+- [2026-07-13][P2][ARCH][TEST] Extract top-20 parity artifact utilities behind a tested boundary.
+  - Delivered `scripts/top20_parity_utils.py` for deterministic JSON/text artifacts, hashing, timestamps, relative paths, scenario names, and fixture path validation; the 21k-line runner now imports this public utility surface without changing report semantics.
+  - Evidence: `npm run test:top20-utils` passed, Python compilation passed, `python3 scripts/top20_behavior_parity_smoke.py --help` passed, and `npm run check` passed. The full `npm run report:top20-behavior` lane was started but interrupted after 10+ minutes while an environment-heavy scenario worker blocked on `/api/extension/ui/poll`; no report pass is claimed.
+- [2026-07-13][P2][ARCH][TEST] Extract top-20 scenario status classification behind a tested boundary.
+  - Delivered `scripts/top20_scenario_status.py` for pure scenario execution/status, surface, follow-up, and validation classification; the parity runner preserves its historical names while delegating to the tested module.
+  - Evidence: `npm run test:top20-status`, `npm run test:top20-utils`, Python compilation, module identity/import checks, `npm run check` (163/163), and `npm run test:parity:frontend` passed.
+- [2026-07-13][P2][ARCH][TEST] Extract top-20 artifact paths and baseline lookups behind a tested boundary.
+  - Delivered `scripts/top20_artifact_paths.py` for sanitized scenario/view/debug/policy/performance/runtime artifact paths plus fixture-hash, unsupported-dependency, and manifest lookups; existing runner helpers now delegate to it.
+  - Evidence: `npm run test:top20-paths`, `npm run test:top20-status`, `npm run test:top20-utils`, Python compilation/import checks, runner help, `npm run check` (163/163), and `npm run test:parity:frontend` passed.
+- [2026-07-13][P2][ARCH][TEST] Extract top-20 artifact loading behind a tested boundary.
+  - Delivered `scripts/top20_artifact_loading.py` for tolerant missing/malformed/non-object JSON handling and scenario artifact reads through the shared path boundary; existing runner helpers retain their historical signatures.
+  - Evidence: `npm run test:top20-loading`, `npm run test:top20-paths`, `npm run test:top20-status`, `npm run test:top20-utils`, Python compilation/delegation checks, `npm run check` (163/163), and `npm run test:parity:frontend` passed.
+
+## Retired Or Disproven Claims
+
+- [2026-07-13][P2][RESEARCH] PowerFuzz firmware/power-trace experiment not applicable.
+  - Assessment: WIZP has no firmware, embedded target, power-measurement fixture, or product risk that would justify importing this approach; its existing host/runtime/UI/process telemetry is the relevant observable feedback surface.
+  - Evidence: `docs/research/POWERFUZZ_INTAKE.md` and the cited [PowerFuzz paper](https://arxiv.org/abs/2606.24692). No hardware capability or experiment is claimed.
+- [2026-07-13][P1][RELEASE][BUILD] Protect release workflow evidence wiring.
+  - Delivered `npm run check:release-workflow`, validating the macOS/Windows/Linux matrix, expected-runner contract, stress-history recording, package/stress artifact uploads, and beta-readiness aggregation.
+  - Evidence: release workflow contract passed, `npm run check` passed with 163/163 tests, and `npm run test:parity:frontend` passed. External runner artifacts remain open.
+- [2026-07-13][P1][RELEASE][TEST] Protect cross-OS artifact intake.
+  - Delivered `npm run check:cross-os-artifacts`, validating aggregate schema, required-system partition, per-report validity, and partial-versus-verified status without requiring missing external runners.
+  - Evidence: regenerated cross-OS report remains honestly `partial` with Linux valid and darwin/windows missing; the aggregate contract passed, `npm run check` passed with 163/163 tests, and frontend parity passed.
+- [2026-07-13][P1][BUILD][NATIVE] Keep packaged frontend assets fresh after clean rebuilds.
+  - Delivered a Zig build-graph input for `frontend/dist/index.html`, ensuring `zig-out/frontend-dist` and Electrobun cannot remain on an old hashed frontend bundle after Vite changes; also removed project caches and WIZP temporary probe artifacts.
+  - Evidence: clean frontend/backend/Electrobun rebuild passed, served native bundle advanced to `index-DzUU2MTT.js`, native probe reported zero page errors/request failures, and final cache/temp inventory was empty.
+- [2026-07-13][P1][PERF][TRIAGE] Classify H11E performance blockers by ownership.
+  - Delivered artifact-backed triage for eight blocked scenarios; all are `extension-owned-behavior` with failed activation, first-result, and/or spawned-process budgets.
+  - Evidence: `npm run test:budget-gate` passed and `build/vscode-parity/top20-behavior-performance-budgets.json` contains the eight unique scenario/artifact records. No WIZP-owned performance closure is claimed.
+- [2026-07-13][P1][RELEASE][LINUX] Refresh the locally provable cross-OS package leg.
+  - Delivered a fresh Linux `parity_cross_os_package_smoke.py --expected-runner ubuntu-latest` artifact covering terminal startup, POSIX PTY, webview policy, diagnostics export, path normalization, and extension-host smoke.
+  - Evidence: `build/parity-package/cross-os-package-report.json` reports `local-package-startup-and-surface-smoke-verified`; aggregate remains `partial` solely because darwin/windows artifacts are missing.
+- [2026-07-13][P1][STRESS][LINUX] Refresh local stress-budget evidence.
+  - Delivered a fresh `python3 scripts/parity_stress_smoke.py` run covering startup, large-repo search, 50 MB file handling, memory growth, and crash recovery.
+  - Evidence: stress contract passed; `npm run report:stress-trend` remains `trend-baseline-recorded` with 0/3 required GitHub Actions samples, and no CI trend closure is claimed.
+- [2026-07-13][P1][BUILD][VERIFY] Make the broad verification gate audit the release-shaped package.
+  - Fixed `scripts/verify.sh` to run `npm run build:self-contained` before package auditing. The previous gate audited `build/dev-linux-x64/WIZP-dev`, which is intentionally glibc-linked and lacks vendored CEF, producing false failures for a strict release audit.
+  - Evidence: `npm run verify` passed 163/163 Zig tests, parity daemon/frontend smokes, frontend build/format/lint (0 errors), musl self-contained build, Electrobun packaging, CEF/runtime vendoring, package pruning, bundled audit, and strict self-contained audit.
+- [2026-07-13][P2][FRONTEND][LINT] Remove mechanical `prefer-const` warnings.
+  - Applied ESLint's safe `prefer-const` fixes across the frontend without changing behavior; the warning count fell from 250 to 188 and errors remained at zero.
+  - Evidence: `npm run lint -- --fix`, `npm run format:check`, `npm run test:parity:frontend`, and the full `npm run verify` all passed; remaining warnings are non-mechanical unused-variable, empty-block, keyed-each, and DOM-manipulation findings.
+- [2026-07-13][P2][FRONTEND][LINT] Remove proven-dead imports and constants.
+  - Removed unused component imports, the obsolete icon map, unused theme inventory, and dead logger/store symbols without changing runtime behavior; the warning count fell from 188 to 174.
+  - Evidence: `npm run format:check`, `npm run lint` (174 warnings, 0 errors), `npm run test:parity:frontend`, and full `npm run verify` passed, including the strict self-contained package audit.
+- [2026-07-13][P2][FRONTEND][LINT] Clean bridge and leaf-component unused symbols.
+  - Removed unused bridge declarations/error helper, unused toolbar/palette imports, and the unused titlebar close helper; the warning count fell from 174 to 159 without changing interaction paths.
+  - Evidence: `npm run format:check`, `npm run lint` (159 warnings, 0 errors), `npm run test:parity:frontend`, and full `npm run verify` passed through strict self-contained packaging.
+- [2026-07-13][P2][FRONTEND][LINT] Document intentionally unused editor callback parameters.
+  - Renamed unused Monaco provider parameters with the repository's underscore convention and removed an unreferenced drag-state cell; warning count fell from 159 to 147 without changing provider behavior or public split APIs.
+  - Evidence: `npm run format:check`, `npm run lint` (147 warnings, 0 errors), `npm run test:parity:frontend`, and full `npm run verify` passed through strict self-contained packaging.
+- [2026-07-13][P2][FRONTEND][LINT][HYGIENE] Remove unused catch bindings and remaining dead leaf symbols.
+  - Removed unused catch bindings, unused sidebar/palette/editor symbols, the unused webview poll helper, and an unused tree prop declaration; warning count fell from 147 to 122 while empty catches remain visible as separate findings.
+  - Evidence: `npm run format:check`, `npm run lint` (122 warnings, 0 errors), `npm run test:parity:frontend`, full `npm run verify`, and final cache/temp inventory verification all passed.
+- [2026-07-13][P2][BUILD][HYGIENE] Clean transient caches and temporary probe artifacts after verification.
+  - Removed project `.zig-cache`, Python `__pycache__`, Vite `.vite`, and `/tmp/wizp-*` artifacts after the successful build; preserved `frontend/dist`, packaged outputs, and build evidence reports.
+  - Evidence: final `find` inventory reported no matching cache/temp paths and `git diff --check` passed.
+- [2026-07-13][P2][FRONTEND][LINT] Remove the final unused frontend symbols.
+  - Removed unused contributed-view state, stale webview HTML state, and the unused UI-prompt bridge import; warning count fell from 122 to 119 with no errors.
+  - Evidence: `npm run format:check`, `npm run lint` (119 warnings, 0 errors), `npm run test:parity:frontend`, full `npm run verify`, and strict package audit all passed.
+- [2026-07-13][P2][BUILD][HYGIENE] Repeat post-build cache/temp cleanup.
+  - Removed `.zig-cache`, Python `__pycache__`, frontend Vite cache, and `/tmp/wizp-*` artifacts after the verified build; packaged outputs and reports remain intact.
+  - Evidence: final cache/temp inventory was empty, strict audit remained passed, and `git diff --check` passed.
+- [2026-07-13][P2][FRONTEND][LINT] Document startup and theme best-effort catches.
+  - Added explicit comments to silent startup, session, theme, layout, and browser-window catches; behavior remains unchanged while the warning count fell from 119 to 107.
+  - Evidence: `npm run format:check`, `npm run lint` (107 warnings, 0 errors), `npm run test:parity:frontend`, and full `npm run verify` passed.
+- [2026-07-13][P2][BUILD][HYGIENE] Clean transient caches and temp artifacts after the verified package build.
+  - Removed `.zig-cache`, Python `__pycache__`, frontend Vite cache, and `/tmp/wizp-*`; preserved packaged outputs and evidence reports.
+  - Evidence: final inventory was empty, strict self-contained audit passed, and `git diff --check` passed.
+- [2026-07-13][P2][FRONTEND][LINT] Document leaf-component best-effort catches.
+  - Added explicit comments to intentional silent catches in the command palette, debug, explorer, hub, search, status, terminal, tree, prompt, and editor-state paths; warning count fell from 107 to 95 with no behavior change.
+  - Evidence: `npm run format:check`, `npm run lint` (95 warnings, 0 errors), `npm run test:parity:frontend`, and full `npm run verify` passed.
+- [2026-07-13][P2][BUILD][HYGIENE] Clean caches and temp artifacts after the leaf lint/package pass.
+  - Removed `.zig-cache`, Python `__pycache__`, frontend Vite cache, and `/tmp/wizp-*`; preserved built outputs and reports.
+  - Evidence: final cache/temp inventory was empty, strict audit passed, and `git diff --check` passed.
+- [2026-07-13][P2][FRONTEND][LINT] Document settings/sidebar best-effort catches.
+  - Added explicit comments to intentional debug, step, theme, and remote-settings catches; warning count fell from 95 to 87 with no behavior change.
+  - Evidence: `npm run format:check`, `npm run lint` (87 warnings, 0 errors), `npm run test:parity:frontend`, and full `npm run verify` passed.
+- [2026-07-13][P2][BUILD][HYGIENE] Clean caches and temp artifacts after the settings/sidebar package pass.
+  - Removed `.zig-cache`, Python `__pycache__`, frontend Vite cache, and `/tmp/wizp-*`; preserved packaged outputs and reports.
+  - Evidence: final cache/temp inventory was empty, strict audit passed, and `git diff --check` passed.
+- [2026-07-13][P2][FRONTEND][LINT] Add stable keys to small frontend lists.
+  - Added stable reconciliation keys to activity-bar items, context-menu entries, debug configurations/variables/frames, and welcome lists; warning count fell from 87 to 79 without changing list behavior.
+  - Evidence: `npm run format:check`, `npm run lint` (79 warnings, 0 errors), `npm run test:parity:frontend`, and full `npm run verify` passed.
+- [2026-07-13][P2][BUILD][HYGIENE] Clean caches and temp artifacts after the keyed-list package pass.
+  - Removed `.zig-cache`, Python `__pycache__`, frontend Vite cache, and `/tmp/wizp-*`; preserved packaged outputs and reports.
+  - Evidence: final cache/temp inventory was empty, strict audit passed, and `git diff --check` passed.
+- [2026-07-13][P2][FRONTEND][LINT] Add stable keys to remaining straightforward data lists.
+  - Added identity keys to explorer/tree items, outline symbols, hub results, quick-pick/search results, status actions, and prompt progress tasks; warning count fell from 79 to 69 with no behavior change.
+  - Evidence: `npm run format:check`, `npm run lint` (69 warnings, 0 errors), `npm run test:parity:frontend`, and full `npm run verify` passed.
+- [2026-07-13][P2][BUILD][HYGIENE] Clean caches and temp artifacts after the second keyed-list package pass.
+  - Removed `.zig-cache`, Python `__pycache__`, frontend Vite cache, and `/tmp/wizp-*`; preserved packaged outputs and reports.
+  - Evidence: final cache/temp inventory was empty, strict audit passed, and `git diff --check` passed.
+- [2026-07-13][P2][FRONTEND][LINT] Add stable keys to sidebar and panel data lists.
+  - Added identity keys to settings options, SCM/debug/extension sidebar data, terminal groups, problems, output channels, and debug-console lines; warning count fell from 69 to 46 with no errors.
+  - Evidence: `npm run format:check`, `npm run lint` (46 warnings, 0 errors), `npm run test:parity:frontend`, and full `npm run verify` passed.
+- [2026-07-13][P2][BUILD][HYGIENE] Clean caches and temp artifacts after the sidebar/panel package pass.
+  - Removed `.zig-cache`, Python `__pycache__`, frontend Vite cache, and `/tmp/wizp-*`; preserved packaged outputs and reports.
+  - Evidence: final cache/temp inventory was empty, strict audit passed, and `git diff --check` passed.
+- [2026-07-13][P2][FRONTEND][LINT] Complete the straightforward keyed-list pass.
+  - Added stable keys to editor tabs, breadcrumbs, skeleton rows, dropdown items, and terminal groups; all keyed-list lint warnings are now cleared, reducing the warning count from 46 to 42.
+  - Evidence: `npm run format:check`, `npm run lint` (42 warnings, 0 errors), `npm run test:parity:frontend`, and full `npm run verify` passed.
+- [2026-07-13][P2][BUILD][HYGIENE] Clean caches and temp artifacts after the final keyed-list package pass.
+  - Removed `.zig-cache`, Python `__pycache__`, frontend Vite cache, and `/tmp/wizp-*`; preserved packaged outputs and reports.
+  - Evidence: final cache/temp inventory was empty, strict audit passed, and `git diff --check` passed.
+- [2026-07-13][P2][FRONTEND][LINT] Document editor lifecycle and persistence catches.
+  - Added explicit comments to optional breadcrumb, diagnostics, breakpoint, webview, session, save-participant, workspace, and teardown catches; warning count fell from 42 to 26 with no behavior change.
+  - Evidence: `npm run format:check`, `npm run lint` (26 warnings, 0 errors), `npm run test:parity:frontend`, and full `npm run verify` passed.
+- [2026-07-13][P2][BUILD][HYGIENE] Clean caches and temp artifacts after the editor lifecycle package pass.
+  - Removed `.zig-cache`, Python `__pycache__`, frontend Vite cache, and `/tmp/wizp-*`; preserved packaged outputs and reports.
+  - Evidence: final cache/temp inventory was empty, strict audit passed, and `git diff --check` passed.
+- [2026-07-13][P2][FRONTEND][LINT] Document Monaco provider fallback catches.
+  - Added explicit comments to inlay-hint, code-lens, folding, signature-help, completion, hover, and provider-registration fallbacks; warning count fell from 26 to 17 with no behavior change.
+  - Evidence: `npm run format:check`, `npm run lint` (17 warnings, 0 errors), `npm run test:parity:frontend`, and full `npm run verify` passed.
+- [2026-07-13][P2][BUILD][HYGIENE] Clean caches and temp artifacts after the provider package pass.
+  - Removed `.zig-cache`, Python `__pycache__`, frontend Vite cache, and `/tmp/wizp-*`; preserved packaged outputs and reports.
+  - Evidence: final cache/temp inventory was empty, strict audit passed, and `git diff --check` passed.
+- [2026-07-13][P2][FRONTEND][LINT] Document settings persistence catches.
+  - Added explicit comments to the independent backend preference writes so local settings remain authoritative when any remote write fails; warning count fell from 17 to 6.
+  - Evidence: `npm run format:check`, `npm run lint` (6 warnings, 0 errors), `npm run test:parity:frontend`, and full `npm run verify` passed.
+- [2026-07-13][P2][BUILD][HYGIENE] Clean caches and temp artifacts after the settings package pass.
+  - Removed `.zig-cache`, Python `__pycache__`, frontend Vite cache, and `/tmp/wizp-*`; preserved packaged outputs and reports.
+  - Evidence: final cache/temp inventory was empty, strict audit passed, and `git diff --check` passed.
+- [2026-07-13][P2][FRONTEND][LINT] Scope controlled legacy DOM renderers.
+  - Added rationale-backed lint suppressions to the quick-open and menu renderers where imperative DOM is required for legacy positioning/interaction; frontend lint is now 0 warnings and 0 errors.
+  - Evidence: `npm run format:check`, `npm run lint` (0 warnings, 0 errors), `npm run test:parity:frontend`, and full `npm run verify` passed.
+- [2026-07-13][P2][BUILD][HYGIENE] Clean caches and temp artifacts after the lint-clean package pass.
+  - Removed `.zig-cache`, Python `__pycache__`, frontend Vite cache, and `/tmp/wizp-*`; preserved packaged outputs and reports.
+  - Evidence: final cache/temp inventory was empty, strict audit passed, and `git diff --check` passed.
+- [2026-07-13][P1][RELEASE][EVIDENCE] Refresh locally provable release truth after lint completion.
+  - Re-ran the real local stress-budget smoke and Linux cross-OS package smoke; regenerated stress, cross-OS, beta-readiness, performance-baseline, and H11E evidence while preserving external blockers.
+  - Evidence: local stress and Linux package smokes passed; cross-OS contract passed with partial status, stress history passed at 0/3 GitHub Actions samples, performance coverage passed with extension timing unverified, H11E gate passed with 8 blockers, workflow contract passed, and final cache/temp inventory was clean.
+- [2026-07-13][P1][RELEASE][DOCS][TEST] Add a durable external evidence handoff contract.
+  - Added `docs/release/BETA_EVIDENCE_RUNBOOK.md` with workflow artifact names, download placement, validation commands, and conservative closure rules; added `npm run check:release-evidence-runbook` to keep the handoff aligned.
+  - Evidence: runbook, workflow contract, cross-OS contract, stress CI history, performance baseline, H11E budget, and full `npm run verify` all passed; external OS/CI evidence remains open.
+- [2026-07-13][P2][BUILD][HYGIENE] Clean caches and temp artifacts after the evidence-handoff package pass.
+  - Removed `.zig-cache`, Python `__pycache__`, frontend Vite cache, and `/tmp/wizp-*`; preserved packaged outputs and evidence reports.
+  - Evidence: final cache/temp inventory was empty, strict audit passed, and `git diff --check` passed.
+- [2026-07-13][P1][PERF][TEST] Protect the extension timing evidence boundary.
+  - Added `scripts/check_extension_timing_boundary.py` and `npm run check:extension-timing-boundary` to require explicit unverified extension timing, the eight extension-owned H11E blockers, and blocked promotion until evidence changes.
+  - Wired the check into the evidence runbook; the contract, full `npm run verify`, strict package audit, and current local release gates passed without claiming extension closure.
+- [2026-07-13][P1][RELEASE][CI] Validate the evidence handoff inside beta aggregation.
+  - Added a beta-readiness workflow step that runs `check_release_evidence_runbook.py` before artifact intake; extended `npm run check:release-workflow` to protect the wiring.
+  - Evidence: release workflow contract, release-evidence runbook contract, cross-OS artifact contract, stress-history, performance, and H11E gates passed; external OS/CI evidence remains open.
+- [2026-07-13][P1][RELEASE][CI] Preserve beta readiness visibility when upstream evidence is missing.
+  - Added best-effort artifact downloads to the beta aggregation job and extended the workflow contract to protect the failure-visible path.
+  - Evidence: workflow, runbook, cross-OS, stress-history, performance, H11E, and full verification gates passed; missing external evidence remains represented as blocked rather than hidden by an aggregation failure.
+- [2026-07-13][P1][RELEASE][TEST] Guard generated beta-readiness consistency.
+  - Added `check_beta_readiness_contract.py`, `npm run check:beta-readiness`, and a CI validation step before publishing `beta-readiness-report`.
+  - Evidence: the current blocked report passes status/blocker, cross-OS partition, and stress-field validation; external OS/CI/timing blockers remain unchanged.
+- [2026-07-13][P1][RELEASE][TEST] Add focused beta-readiness contract coverage.
+  - Added `test_beta_readiness_contract.py` and `npm run test:beta-readiness`; CI now runs the deterministic contract tests before generating the readiness report.
+  - Evidence: all focused cases pass, including current blocked-state acceptance and rejection of ready-with-blockers, cross-OS status drift, and invalid stress counts.
+- [2026-07-13][P1][RELEASE][CI] Bundle cross-OS aggregate with beta readiness handoff.
+  - Updated the beta artifact upload and runbook contract to publish `cross-os-artifact-report.json` beside `beta-readiness.json`.
+  - Evidence: workflow and runbook contracts pass; the local aggregate remains honestly partial with Linux valid and darwin/windows missing.
+- [2026-07-13][P1][RELEASE][TEST] Validate the beta handoff artifact bundle.
+  - Added `check_beta_handoff_artifact.py` and `npm run check:beta-handoff`; CI now verifies the readiness summary and cross-OS aggregate agree before upload.
+  - Evidence: bundle validation, workflow/runbook contracts, focused tests, and full verification pass; external evidence remains partial.
+- [2026-07-13][P1][RELEASE][CI] Validate downloaded evidence before beta aggregation.
+  - Added failure-visible, non-blocking cross-OS and stress-history checks to the beta aggregation job after artifact download.
+  - Evidence: workflow/runbook contracts and all local release gates pass; missing external OS/CI evidence remains explicitly blocked.
+- [2026-07-13][P1][STRESS][CI][TEST] Bundle and reconcile stress-trend evidence.
+  - Added `stress-trend-report.json` to the beta handoff and extended `check:beta-handoff` to compare status, total/CI/missing counts, required history/source, and readiness against the beta summary.
+  - Evidence: seven focused beta/handoff tests, stress-history validation, workflow/runbook contracts, and full verification pass; current GitHub Actions history remains honestly 0/3.
+- [2026-07-13][P1][RELEASE][TRUTH][TEST] Surface unfinished platform rows in beta readiness.
+  - Promoted Windows ConPTY (`PROD-B02`) and macOS native shell/WebView/PTY (`PROD-B03`) into the root accepted queue; generated readiness now emits both blockers separately from missing artifacts.
+  - Added contract coverage requiring open platform rows to remain visible, refreshed README/architecture/memory/roadmap/runbook/changelog truth, and preserved Linux-only scope.
+  - Evidence: nine focused beta tests, readiness/handoff/workflow/runbook/cross-OS/stress/performance/H11E gates, and full `npm run verify` passed; the generated report is blocked with five explicit blockers.
+- [2026-07-13][P2][BUILD][HYGIENE] Clean all caches and temporary artifacts after platform-truth verification.
+  - Removed Zig, Python, Vite/Svelte, Node/Electrobun, and `/tmp/wizp-*` caches while preserving packaged outputs and generated evidence.
+  - Evidence: final cache/temp inventory was empty, required readiness/package/stress artifacts remained present, and `git diff --check` passed.
+- [2026-07-13][P2][BUILD][HYGIENE] Clean caches and temp artifacts after the timing-boundary package pass.
+  - Removed `.zig-cache`, Python `__pycache__`, frontend Vite cache, and `/tmp/wizp-*`; preserved packaged outputs and evidence reports.
+  - Evidence: final cache/temp inventory was empty and `git diff --check` passed.

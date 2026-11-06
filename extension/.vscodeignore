@@ -1,0 +1,14 @@
+.vscode/**
+.vscode-test/**
+src/**
+.git/**
+**/tsconfig.json
+**/*.map
+**/*.ts
+!extension.js
+node_modules/.cache/**
+node_modules/typescript/**
+node_modules/@types/**
+extension/build-vsix.sh
+package-lock.json
+*.vsix

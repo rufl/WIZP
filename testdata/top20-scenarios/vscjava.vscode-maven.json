@@ -1,0 +1,45 @@
+{
+  "extensionId": "vscjava.vscode-maven",
+  "lane": "language/tooling",
+  "rank": 13,
+  "referenceHost": "MrCode",
+  "scenarios": [
+    {
+      "actions": [
+        "Open Maven explorer",
+        "Refresh project",
+        "Run safe goal",
+        "Run missing-Maven path"
+      ],
+      "activationEvents": [
+        "workspaceContains:pom.xml"
+      ],
+      "backlogIds": [
+        "T20V-019"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "treeNodes",
+        "taskOutput",
+        "problemMatcher",
+        "refreshState",
+        "messages",
+        "processAudit"
+      ],
+      "viewProbeIds": [
+        "mavenProjects"
+      ],
+      "fixture": "fixtures/java/maven-project",
+      "id": "maven-explorer-goals",
+      "kind": "tasks-tree",
+      "runtimeModes": [
+        "valid-runtime",
+        "missing-runtime"
+      ],
+      "settings": {},
+      "title": "Verify Maven explorer, project import, goals, and missing-Maven UX"
+    }
+  ],
+  "schema": "wizp.top20-behavior-scenario.v1",
+  "version": "0.45.3"
+}

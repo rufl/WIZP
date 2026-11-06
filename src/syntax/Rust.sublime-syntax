@@ -1,0 +1,59 @@
+%YAML 1.2
+---
+name: Rust
+file_extensions:
+  - rs
+  - rlib
+scope: source.rust
+variables:
+  ident: '[a-zA-Z_][a-zA-Z0-9_]*'
+contexts:
+  main:
+    - match: //[^\n]*
+      scope: comment.line.double-slash.rust
+    - match: /\*
+      scope: comment.block.rust
+      push:
+        - match: \*/
+          scope: comment.block.rust
+          pop: true
+    - match: '"'
+      scope: string.quoted.double.rust
+      push: string-double
+    - match: 'r(#*)'
+      scope: string.quoted.raw.rust
+      push: string-raw
+    - match: '\b(fn|let|mut|if|else|while|for|in|loop|match|return|break|continue|use|mod|pub|impl|trait|struct|enum|type|where|as|async|await|dyn|move|ref|static|const|unsafe|extern|crate|super|self|Self|macro_rules!|dyn|yield|become)\b'
+      scope: keyword.control.rust
+    - match: '\b(bool|char|str|i8|i16|i32|i64|i128|isize|u8|u16|u32|u64|u128|usize|f32|f64|String|Vec|Option|Result|Box|HashMap|HashSet|BTreeMap|Arc|Rc|Cell|RefCell|Mutex|RwLock|Cow)\b'
+      scope: storage.type.rust
+    - match: '\b(true|false|None|Some|Ok|Err|std|core|alloc)\b'
+      scope: constant.language.rust
+    - match: '\b([0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?|0[xX][0-9a-fA-F]+|0[oO][0-7]+|0[bB][01]+)(?:i8|i16|i32|i64|isize|u8|u16|u32|u64|usize|f32|f64)?\b'
+      scope: constant.numeric.rust
+    - match: '\b(println!|print!|format!|panic!|assert!|assert_eq!|assert_ne!|debug_assert!|todo!|unimplement!|unreachable!|dbg!|vec!|include!|include_str!|include_bytes!|env!|option_env!|concat!|stringify!|cfg!|line!|column!|file!|module_path!|compile_error!|thread_local!)\b'
+      scope: support.macro.rust
+    - match: '\b(Some|None|Ok|Err|Iterator|IntoIterator|Clone|Copy|Debug|Display|Default|PartialEq|Eq|PartialOrd|Ord|Hash|Send|Sync|Drop|Deref|DerefMut|AsRef|AsMut|From|Into|TryFrom|TryInto|Error)\b'
+      scope: entity.name.type.rust
+    - match: "'\\\\.'"
+      scope: constant.character.rust
+    - match: '\b{{ident}}!\b'
+      scope: meta.macro.rust
+    - match: '{{ident}}\s*(?=\()'
+      scope: entity.name.function.rust
+    - match: '\b{{ident}}\b'
+      scope: variable.other.rust
+    - match: '[+\-*/%&|^~!<>=?:;,.(){}[\]]+|::|->|=>|\.\.|\.\.\.|\.\.='
+      scope: keyword.operator.rust
+  string-double:
+    - meta_scope: string.quoted.double.rust
+    - match: '\\.'
+      scope: constant.character.escape.rust
+    - match: '"'
+      scope: string.quoted.double.rust
+      pop: true
+  string-raw:
+    - meta_scope: string.quoted.raw.rust
+    - match: '"#'
+      scope: string.quoted.raw.rust
+      pop: true

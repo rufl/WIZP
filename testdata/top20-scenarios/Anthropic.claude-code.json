@@ -1,0 +1,78 @@
+{
+  "extensionId": "Anthropic.claude-code",
+  "lane": "ai/agent",
+  "rank": 12,
+  "referenceHost": "MrCode",
+  "scenarios": [
+    {
+      "actions": [
+        "Open contributed view",
+        "Run safe command",
+        "Capture missing-auth/CLI messages"
+      ],
+      "activationCommands": [
+        "claude-vscode.sidebar.open",
+        "claude-vscode.terminal.open",
+        "claude-vscode.showLogs"
+      ],
+      "activationEvents": [
+        "onStartupFinished"
+      ],
+      "backlogIds": [
+        "T20V-023"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "commands",
+        "views",
+        "terminalPolicy",
+        "messages",
+        "secretRedaction",
+        "networkAudit"
+      ],
+      "fixture": "fixtures/ai/claude-offline",
+      "id": "claude-code-offline",
+      "kind": "ai-offline",
+      "runtimeModes": [
+        "offline"
+      ],
+      "settings": {},
+      "title": "Verify Claude Code offline command/view/terminal behavior"
+    },
+    {
+      "actions": [
+        "Deny startup network",
+        "Grant explicit consent",
+        "Capture auth/session behavior"
+      ],
+      "activationCommands": [
+        "claude-code.start"
+      ],
+      "activationEvents": [
+        "onCommand:claude-code.start"
+      ],
+      "backlogIds": [
+        "T20V-024"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "blockedStartupCalls",
+        "consentState",
+        "allowedEndpoints",
+        "sessionState",
+        "redaction",
+        "offlineFallback"
+      ],
+      "fixture": "fixtures/ai/claude-consent",
+      "id": "claude-code-opt-in-network",
+      "kind": "ai-network",
+      "runtimeModes": [
+        "opt-in-network"
+      ],
+      "settings": {},
+      "title": "Verify opt-in network/auth flow"
+    }
+  ],
+  "schema": "wizp.top20-behavior-scenario.v1",
+  "version": "2.1.175"
+}

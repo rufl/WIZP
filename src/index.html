@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIZP — VSCodium</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon-Qz3BtmAG.svg">
+    <style>
+        /* ============================================================
+   VSCodium 1:1 Color Palette (Default Dark+ Theme)
+   ============================================================ */
+        :root {
+            --bg: #1e1e1e;
+            --fg: #cccccc;
+            --sidebar-bg: #252526;
+            --sidebar-fg: #cccccc;
+            --activity-bar-bg: #333333;
+            --activity-bar-fg: #ffffff;
+            --activity-bar-inactive-fg: #858585;
+            --activity-bar-active-border: #ffffff;
+            --activity-bar-badge-bg: #007acc;
+            --tab-bg: #2d2d2d;
+            --tab-active-bg: #1e1e1e;
+            --tab-active-fg: #ffffff;
+            --tab-inactive-fg: #969696;
+            --tab-border: #252526;
+            --tab-active-border-top: #007acc;
+            --tab-hover-bg: #2a2d2e;
+            --editor-bg: #1e1e1e;
+            --editor-fg: #d4d4d4;
+            --editor-line-highlight: #2a2d2e;
+            --editor-selection: #264f78;
+            --editor-cursor: #ffffff;
+            --editor-line-number: #858585;
+            --editor-line-number-active: #c6c6c6;
+            --status-bar-bg: #007acc;
+            --status-bar-fg: #ffffff;
+            --status-bar-dim: #bbbbbb;
+            --status-bar-no-folder-bg: #68217a;
+            --panel-bg: #1e1e1e;
+            --panel-border: #3c3c3c;
+            --panel-tab-active-fg: #ffffff;
+            --panel-tab-inactive-fg: #969696;
+            --panel-tab-active-border: #007acc;
+            --breadcrumb-bg: #1e1e1e;
+            --breadcrumb-fg: #cccccc;
+            --breadcrumb-dim: #858585;
+            --scrollbar-bg: transparent;
+            --scrollbar-fg: #424242;
+            --scrollbar-hover: #4f4f4f;
+            --accent: #007acc;
+            --warn: #cca700;
+            --error: #f48771;
+            --info: #75beff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background: var(--bg);
+            color: var(--fg);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            font-size: 13px;
+            line-height: 1.4;
+            -webkit-font-smoothing: antialiased;
+            -webkit-user-select: none;
+               -moz-user-select: none;
+                    user-select: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-fg);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--scrollbar-hover);
+        }
+
+        ::-webkit-scrollbar-corner {
+            background: transparent;
+        }
+
+        /* ============================================================
+   VSCodium Workbench CSS Grid Layout
+   ============================================================ */
+        body[data-svelte-boot="pending"] #workbench {
+            display: none;
+        }
+
+        #workbench {
+            display: grid;
+            grid-template-columns: 48px minmax(170px, var(--sidebar-width, 300px)) 6px 1fr 6px minmax(170px, var(--right-sidebar-width, 300px));
+            grid-template-rows: 30px 1fr 6px auto 22px;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        #workbench.act-bar-top {
+            grid-template-columns: minmax(170px, var(--sidebar-width, 300px)) 6px 1fr 6px minmax(170px, var(--right-sidebar-width, 300px));
+            grid-template-rows: 30px 1fr 6px auto 22px;
+        }
+
+        /* ============================================================
+   Title Bar (30px top strip with menus)
+   ============================================================ */
+        #titlebar {
+            grid-row: 1;
+            grid-column: 1 / -1;   /* always full width in both modes */
+            background: var(--titlebar-bg, #3c3c3c);
+            display: flex;
+            align-items: center;
+            height: 30px;
+            -webkit-app-region: drag;
+            -webkit-user-select: none;
+               -moz-user-select: none;
+                    user-select: none;
+            z-index: 200;
+            padding: 0;
+            position: relative;
+        }
+
+        .titlebar-left {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            -webkit-app-region: no-drag;
+        }
+
+        .titlebar-right {
+            flex: 1 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 2px;
+            -webkit-app-region: no-drag;
+        }
+
+        #menubar {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            -webkit-app-region: no-drag;
+            padding-left: 4px;
+        }
+
+        .menu-entry {
+            padding: 0 8px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            color: var(--titlebar-fg, #cccccc);
+            font-size: 13px;
+        }
+
+        .menu-entry:hover,
+        .menu-entry.open {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        #window-title {
+            flex: 1;
+            text-align: center;
+            color: var(--titlebar-fg, #999999);
+            font-size: 12px;
+            pointer-events: none;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        #window-controls {
+            display: flex;
+            height: 100%;
+            -webkit-app-region: no-drag;
+        }
+
+        /* Command Palette input in titlebar (VS Code style) */
+        #titlebar-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-app-region: no-drag;
+            min-width: 200px;
+            max-width: 420px;
+            z-index: 10;
+        }
+
+        #titlebar-command {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            padding: 0 10px;
+            height: 26px;
+            width: 100%;
+            max-width: 320px;
+            color: var(--titlebar-fg, #999);
+            font-size: 12px;
+        }
+
+        #titlebar-command:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        #titlebar-command .codicon {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        #titlebar-command-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--titlebar-fg, #ccc);
+            font-size: 12px;
+            font-family: inherit;
+            -webkit-app-region: no-drag;
+        }
+
+        #titlebar-command-input::-moz-placeholder {
+            color: #888;
+        }
+
+        #titlebar-command-input::placeholder {
+            color: #888;
+        }
+
+        .window-btn {
+            width: 46px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #cccccc;
+        }
+
+        .window-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .window-btn.close:hover {
+            background: #e81123;
+            color: #fff;
+        }
+
+        /* Menu Dropdown (theme-aware) */
+        .menu-dropdown {
+            position: fixed;
+            top: 30px;
+            background: var(--menu-bg, #252526);
+            border: 1px solid var(--panel-border, #3c3c3c);
+            border-radius: 4px;
+            z-index: 1000;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            min-width: 220px;
+            padding: 4px 0;
+            display: none;
+            color: var(--menu-fg, #cccccc);
+        }
+
+        .menu-dropdown.open {
+            display: block;
+        }
+
+        .menu-dropdown.submenu {
+            min-width: 200px;
+            z-index: 1001;
+        }
+
+        .menu-item {
+            padding: 4px 24px 4px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--menu-fg, #cccccc);
+            height: 28px;
+        }
+
+        .menu-item:hover,
+        .menu-item.hover {
+            background: var(--editor-selection, #094771);
+            color: var(--fg, #ffffff);
+        }
+
+        .menu-item.disabled {
+            color: #5a5a5a;
+            pointer-events: none;
+        }
+
+        .menu-item .menu-shortcut {
+            color: var(--breadcrumb-dim, #858585);
+            font-size: 12px;
+            margin-left: 24px;
+        }
+
+        .menu-item:hover .menu-shortcut {
+            color: var(--menu-fg, #cccccc);
+        }
+
+        .menu-separator {
+            height: 1px;
+            background: var(--panel-border, #3c3c3c);
+            margin: 4px 0;
+        }
+
+        /* ============================================================
+   Activity Bar (48px left strip)
+   ============================================================ */
+        #activity-bar {
+            grid-row: 2 / 5;
+            grid-column: 1;
+            background: var(--activity-bar-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 4px;
+            z-index: 100;
+        }
+        #workbench.act-bar-top #activity-bar {
+            position: absolute;
+            top: 30px;
+            left: 0;
+            height: 48px;
+            width: var(--sidebar-width, 300px);
+            flex-direction: row;
+            justify-content: flex-start;
+            padding: 0 2px;
+            gap: 2px;
+            background: var(--activity-bar-bg);
+            z-index: 150;
+            border-bottom: 1px solid var(--panel-border);
+        }
+
+        #workbench.act-bar-top .activity-item {
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+        }
+
+        /* When activity bar on top, it overlays the top of the left sidebar only */
+        #workbench.act-bar-top #sidebar {
+            grid-row: 2;
+            padding-top: 48px; /* space for the overlaid horizontal activity bar */
+        }
+        #workbench.act-bar-top #sidebar-resize { grid-row: 2; }
+        #workbench.act-bar-top #editor-area { grid-row: 2; }
+        #workbench.act-bar-top #panel-resize { grid-row: 3; grid-column: 1 / 6; }
+        #workbench.act-bar-top #panel { grid-row: 4; }
+        #workbench.act-bar-top #status-bar { grid-row: 5; }
+
+        .activity-item {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--activity-bar-inactive-fg);
+            font-size: 22px;
+            position: relative;
+            transition: background-color 0.1s, color 0.1s;
+        }
+
+        .activity-item:hover {
+            color: var(--activity-bar-fg);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .activity-item.active {
+            color: var(--activity-bar-fg);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .activity-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 8px;
+            bottom: 8px;
+            width: 3px;
+            background: var(--activity-bar-active-border);
+            border-radius: 0 2px 2px 0;
+        }
+
+        /* VS Code style badge on activity item */
+        .activity-item .badge {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            min-width: 16px;
+            height: 16px;
+            padding: 0 4px;
+            border-radius: 8px;
+            background: #e51400;
+            color: white;
+            font-size: 10px;
+            line-height: 16px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        #activity-bar-spacer {
+            flex: 1;
+        }
+
+        #activity-settings {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--activity-bar-inactive-fg);
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        #activity-settings:hover {
+            color: var(--activity-bar-fg);
+        }
+
+        /* ============================================================
+   Sidebar (Explorer / Search / SCM / Debug / Extensions)
+   ============================================================ */
+        #sidebar {
+            grid-row: 2;
+            grid-column: 2;
+            background: var(--sidebar-bg);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 50;
+            border-right: 1px solid var(--panel-border);
+        }
+
+        #sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 12px 0 20px;
+            height: 35px;
+            flex-shrink: 0;
+        }
+
+        #sidebar-title {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--sidebar-fg);
+        }
+
+        #sidebar-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        #sidebar-actions button {
+            background: none;
+            border: none;
+            color: var(--breadcrumb-dim);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 2px 4px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+        }
+
+        #sidebar-actions button:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--sidebar-fg);
+        }
+
+        #sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        #sidebar-content .tree-row {
+            display: flex;
+            align-items: center;
+            padding: 2px 0 2px 20px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-size: 13px;
+            color: var(--sidebar-fg);
+            height: 22px;
+        }
+
+        #sidebar-content .tree-row:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        #sidebar-content .tree-row.selected {
+            background: var(--editor-selection);
+        }
+
+        #sidebar-content .tree-row.directory {
+            font-weight: 600;
+        }
+
+        #search-box {
+            padding: 8px 12px;
+            flex-shrink: 0;
+        }
+
+        #search-box input {
+            width: 100%;
+            padding: 4px 8px;
+            background: #3c3c3c;
+            border: 1px solid transparent;
+            color: var(--sidebar-fg);
+            font-size: 12px;
+            outline: none;
+        }
+
+        #search-box input:focus {
+            border-color: var(--accent);
+        }
+
+        #search-results {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0;
+        }
+
+        .search-result {
+            padding: 4px 12px 4px 20px;
+            cursor: pointer;
+            font-size: 12px;
+            color: var(--sidebar-fg);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            height: 24px;
+        }
+
+        .search-result:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        /* Resize Handles */
+        #sidebar-resize {
+            grid-row: 2; grid-column: 3;
+            cursor: col-resize;
+            background: var(--panel-border);
+            border: none;
+            z-index: 10;
+        }
+        #sidebar-resize:hover, #sidebar-resize.active {
+            background: #007acc;
+        }
+        #right-sidebar-resize {
+            grid-row: 2; grid-column: 5;
+            cursor: col-resize;
+            background: var(--panel-border);
+            border: none;
+            z-index: 10;
+        }
+        #right-sidebar-resize:hover, #right-sidebar-resize.active {
+            background: #007acc;
+        }
+        #right-sidebar {
+            grid-row: 2; grid-column: 6;
+            background: var(--sidebar-bg);
+            color: var(--fg);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 50;
+            border-left: 1px solid var(--panel-border);
+        }
+        #right-sidebar.right-sidebar-hidden {
+            display: none;
+        }
+        #panel-resize {
+            grid-row: 3; grid-column: 2 / 7;
+            cursor: row-resize;
+            background: var(--panel-border);
+            border: none;
+            z-index: 10;
+        }
+        #panel-resize:hover, #panel-resize.active {
+            background: #007acc;
+        }
+
+        /* ============================================================
+    Editor Area
+   ============================================================ */
+        #editor-area {
+            grid-row: 2;
+            grid-column: 4;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            min-height: 0;
+            background: var(--editor-bg);
+            position: relative; /* for welcome page overlay */
+        }
+
+        /* Editor Action Buttons (in titlebar, next to window controls) */
+        #editor-actions {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            height: 100%;
+            flex-shrink: 0;
+            -webkit-app-region: no-drag;
+        }
+
+        .editor-action {
+            width: 36px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            color: #cccccc;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .editor-action:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Tab Bar — VSCodium style */
+        #tab-bar-wrap {
+            display: flex;
+            align-items: flex-end;
+            height: 35px;
+            background: var(--tab-border);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        #tab-bar {
+            display: flex;
+            align-items: flex-end;
+            overflow-x: auto;
+            overflow-y: hidden;
+            flex: 1;
+            height: 35px;
+            padding-right: 4px;
+        }
+
+        #tab-bar::-webkit-scrollbar {
+            height: 3px;
+        }
+
+        .tab {
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            height: 35px;
+            cursor: pointer;
+            background: var(--tab-bg);
+            color: var(--tab-inactive-fg);
+            border-right: 1px solid var(--tab-border);
+            font-size: 13px;
+            white-space: nowrap;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .tab:hover {
+            background: var(--tab-hover-bg);
+        }
+
+        .tab.active {
+            background: var(--tab-active-bg);
+            color: var(--tab-active-fg);
+            border-top: 1px solid var(--tab-active-border-top);
+        }
+
+        .tab .tab-label {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 160px;
+        }
+
+        .tab .tab-dirty {
+            color: var(--warn);
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .tab .tab-close {
+            margin-left: 4px;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.1s;
+        }
+
+        .tab:hover .tab-close,
+        .tab.active .tab-close {
+            opacity: 1;
+        }
+
+        .tab .tab-close:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Breadcrumbs */
+        #breadcrumbs {
+            display: flex;
+            align-items: center;
+            height: 22px;
+            padding: 0 12px;
+            background: var(--breadcrumb-bg);
+            font-size: 12px;
+            color: var(--breadcrumb-dim);
+            flex-shrink: 0;
+            border-bottom: 1px solid var(--panel-border);
+            gap: 2px;
+        }
+
+        #breadcrumbs .crumb {
+            cursor: pointer;
+            padding: 0 2px;
+        }
+
+        #breadcrumbs .crumb:hover {
+            color: var(--fg);
+        }
+
+        #breadcrumbs .crumb-sep {
+            cursor: default;
+            font-size: 10px;
+            padding: 0 2px;
+        }
+
+        /* Monaco Editor */
+        #editor-container {
+            flex: 1;
+            min-height: 0;
+            background: var(--editor-bg);
+        }
+
+        /* ============================================================
+   Panel (Problems / Output / Debug Console / Terminal)
+   ============================================================ */
+        #panel {
+            grid-row: 4;
+            grid-column: 2 / 7;
+            display: flex;
+            flex-direction: column;
+            background: var(--panel-bg);
+            height: 0;
+            min-height: 0;
+            overflow: hidden;
+            transition: height 0.1s ease;
+        }
+        #panel.open {
+            height: 250px;
+        }
+        #panel.open.maximized {
+            height: calc(100vh - 30px - 22px) !important;
+        }
+
+        #status-bar {
+            grid-row: 5;
+            grid-column: 1 / 7;
+            display: flex;
+            align-items: center;
+            height: 22px;
+            background: var(--status-bar-bg);
+            color: var(--status-bar-fg);
+            font-size: 12px;
+            z-index: 100;
+            padding: 0 4px;
+            gap: 2px;
+        }
+
+        /* Panel inner layout */
+        #panel-header {
+            display: flex; align-items: center; flex-shrink: 0;
+            height: 35px; padding: 0 8px; background: var(--sidebar-bg);
+            border-bottom: 1px solid var(--panel-border);
+        }
+        #panel-tabs { display: flex; flex: 1; gap: 0; height: 100%; align-items: center; }
+        .panel-tab {
+            display: flex; align-items: center; height: 100%;
+            padding: 0 12px; cursor: pointer; font-size: 12px;
+            color: var(--panel-tab-inactive-fg); border-bottom: 1px solid transparent;
+            white-space: nowrap; -webkit-user-select: none; -moz-user-select: none; user-select: none;
+        }
+        .panel-tab:hover { color: var(--fg); }
+        .panel-tab.active { color: var(--panel-tab-active-fg); border-bottom-color: var(--panel-tab-active-border); }
+        #panel-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+        .panel-action {
+            background: none; border: none; color: var(--panel-tab-inactive-fg);
+            cursor: pointer; padding: 4px; display: flex; align-items: center;
+            border-radius: 4px; font-size: 14px;
+        }
+        .panel-action:hover { background: rgba(255,255,255,0.08); color: var(--fg); }
+        #panel-content {
+            flex: 1; min-height: 0; overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+        #panel-content > .panel-view { display: none; flex: 1; color: var(--breadcrumb-dim); padding: 10px 20px; }
+        #panel-content > .panel-view.active { display: flex; }
+        #terminal-container { display: none; width: 100%; height: 100%; }
+        #terminal-container.active { display: flex; }
+
+        #status-bar .status-left {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+
+        #status-bar .status-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            padding: 0 6px;
+            height: 22px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .status-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .status-item.dim {
+            color: var(--status-bar-dim);
+        }
+
+        .status-item.warn {
+            color: var(--warn);
+        }
+
+        /* ============================================================
+   Notification Toasts
+   ============================================================ */
+        @keyframes wizp-fade-in {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .wizp-toast {
+            position: fixed;
+            bottom: 36px;
+            right: 12px;
+            padding: 8px 12px;
+            border-radius: 3px;
+            color: #fff;
+            font-size: 12px;
+            z-index: 9999;
+            animation: wizp-fade-in 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            max-width: 400px;
+            word-break: break-word;
+        }
+
+        /* ============================================================
+   Command Palette / Quick Open Overlay
+   ============================================================ */
+        #quick-input {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            max-width: calc(100vw - 48px);
+            background: #252526;
+            border: 1px solid #3c3c3c;
+            border-radius: 4px;
+            z-index: 1000;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            display: none;
+            flex-direction: column;
+        }
+
+        #quick-input.open {
+            display: flex;
+        }
+
+        #quick-input input {
+            width: 100%;
+            padding: 8px 12px;
+            background: #3c3c3c;
+            border: none;
+            color: var(--fg);
+            font-size: 13px;
+            outline: none;
+            border-radius: 4px 4px 0 0;
+        }
+
+        #quick-input-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        #quick-input-list .qi-item {
+            padding: 6px 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+
+        #quick-input-list .qi-item:hover,
+        #quick-input-list .qi-item.selected {
+            background: var(--editor-selection);
+        }
+
+        #quick-input-list .qi-item .qi-label {
+            color: var(--fg);
+        }
+
+        #quick-input-list .qi-item .qi-hint {
+            color: var(--breadcrumb-dim);
+            font-size: 12px;
+        }
+
+        /* ============================================================
+   Welcome Page (VS Code style editor tab)
+   ============================================================ */
+        .welcome-page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--editor-bg, #1e1e1e);
+            z-index: 10;
+            overflow-y: auto;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .welcome-content {
+            max-width: 720px;
+            width: 100%;
+            padding: 40px 48px 60px;
+        }
+
+        .welcome-header {
+            margin-bottom: 36px;
+        }
+
+        .welcome-header h1 {
+            font-size: 28px;
+            font-weight: 300;
+            color: var(--fg);
+            margin: 0 0 8px;
+        }
+
+        .welcome-product-name {
+            font-weight: 600;
+        }
+
+        .welcome-subtitle {
+            font-size: 14px;
+            color: var(--breadcrumb-dim);
+            margin: 0;
+        }
+
+        .welcome-sections {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 36px;
+        }
+
+        .welcome-section h2 {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--breadcrumb-dim);
+            margin: 0 0 12px;
+        }
+
+        .welcome-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .welcome-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            color: var(--fg);
+            font-size: 13px;
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.1s, border-color 0.1s;
+        }
+
+        .welcome-action-btn:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--panel-border);
+        }
+
+        .welcome-action-btn .codicon {
+            font-size: 16px;
+            color: var(--activity-bar-fg);
+        }
+
+        .welcome-shortcut {
+            margin-left: auto;
+            font-size: 11px;
+            color: var(--breadcrumb-dim);
+        }
+
+        .welcome-recent-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .welcome-links {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .welcome-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 8px;
+            color: var(--fg);
+            font-size: 13px;
+            text-decoration: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+
+        .welcome-link:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .welcome-link .codicon {
+            font-size: 14px;
+            color: var(--activity-bar-fg);
+        }
+
+        .welcome-hint {
+            margin-left: auto;
+            font-size: 11px;
+            color: var(--breadcrumb-dim);
+        }
+
+        .welcome-footer {
+            border-top: 1px solid var(--panel-border);
+            padding-top: 16px;
+        }
+
+        .welcome-checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--breadcrumb-dim);
+            cursor: pointer;
+        }
+
+        .welcome-checkbox-label input[type="checkbox"] {
+            accent-color: var(--accent);
+        }
+
+        @media (max-width: 600px) {
+            .welcome-sections {
+                grid-template-columns: 1fr;
+            }
+            .welcome-content {
+                padding: 24px 20px;
+            }
+        }
+    </style>
+  <script type="module" crossorigin src="/assets/index-BMIAUpu4.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/rolldown-runtime-M0oDzQ_3.js">
+  <link rel="modulepreload" crossorigin href="/assets/svelte-rnzL8t8L.js">
+  <link rel="modulepreload" crossorigin href="/assets/terminal-DB6bMUgg.js">
+  <link rel="stylesheet" crossorigin href="/assets/svelte-B7Ju55Vw.css">
+  <link rel="stylesheet" crossorigin href="/assets/terminal-CoAmScLB.css">
+  <link rel="stylesheet" crossorigin href="/assets/index-DXmwYxtp.css">
+</head>
+
+<body data-svelte-boot="pending">
+
+    <div id="workbench">
+        <!-- Title Bar with Menu -->
+        <div id="titlebar">
+            <!-- Left: Menu -->
+            <div class="titlebar-left">
+                <div id="menubar">
+                    <div class="menu-entry" data-menu="file">File</div>
+                    <div class="menu-entry" data-menu="edit">Edit</div>
+                    <div class="menu-entry" data-menu="selection">Selection</div>
+                    <div class="menu-entry" data-menu="view">View</div>
+                    <div class="menu-entry" data-menu="go">Go</div>
+                    <div class="menu-entry" data-menu="run">Run</div>
+                    <div class="menu-entry" data-menu="terminal">Terminal</div>
+                    <div class="menu-entry" data-menu="help">Help</div>
+                </div>
+            </div>
+
+            <!-- Center: Command Palette (perfectly centered on window) -->
+            <div id="titlebar-center">
+                <div id="titlebar-command">
+                    <span class="codicon codicon-search"></span>
+                    <span id="titlebar-project-name" style="font-size:11px;color:var(--titlebar-fg);opacity:0.6;margin-right:6px;white-space:nowrap;"></span>
+                    <input type="text" id="titlebar-command-input" placeholder="Command Palette (Ctrl+Shift+P)" spellcheck="false" />
+                </div>
+            </div>
+
+            <!-- Right: All control buttons (toggles + window controls) -->
+            <div class="titlebar-right">
+                <div id="editor-actions">
+                    <button class="editor-action" id="btn-split" title="Split Editor Right (Ctrl+\)"><span
+                            class="codicon codicon-split-horizontal"></span></button>
+                    <button class="editor-action" id="btn-toggle-panel" title="Toggle Panel (Ctrl+J)"><span
+                            class="codicon codicon-layout-panel"></span></button>
+                    <button class="editor-action" id="btn-toggle-sidebar" title="Toggle Primary Side Bar (Ctrl+B)"><span
+                            class="codicon codicon-layout-sidebar-left"></span></button>
+                    <button class="editor-action" id="btn-toggle-right-sidebar" title="Toggle Right Sidebar"><span
+                            class="codicon codicon-layout-sidebar-right"></span></button>
+                </div>
+                <div id="window-controls">
+                    <div class="window-btn" id="btn-minimize" title="Minimize"><span
+                            class="codicon codicon-chrome-minimize"></span></div>
+                    <div class="window-btn" id="btn-maximize" title="Maximize"><span
+                            class="codicon codicon-chrome-maximize"></span></div>
+                    <div class="window-btn close" id="btn-close" title="Close"><span
+                            class="codicon codicon-chrome-close"></span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Bar (VSCodium: 48px left strip) -->
+        <div id="activity-bar">
+            <div class="activity-item active" data-view="explorer" title="Explorer (Ctrl+Shift+E)"><span
+                    class="codicon codicon-files"></span></div>
+            <div class="activity-item" data-view="search" title="Search (Ctrl+Shift+F)"><span
+                    class="codicon codicon-search"></span></div>
+            <div class="activity-item" data-view="scm" title="Source Control (Ctrl+Shift+G)"><span
+                    class="codicon codicon-source-control"></span></div>
+            <div class="activity-item" data-view="debug" title="Run and Debug (Ctrl+Shift+D)"><span
+                    class="codicon codicon-debug-alt-small"></span></div>
+            <div class="activity-item" data-view="hub" title="Extensions (Ctrl+Shift+X)"><span
+                    class="codicon codicon-extensions"></span></div>
+            <div id="activity-bar-spacer"></div>
+            <div id="activity-accounts" title="Accounts"><span class="codicon codicon-account"></span></div>
+            <div id="activity-settings" title="Manage"><span class="codicon codicon-settings-gear"></span></div>
+        </div>
+
+        <!-- Sidebar -->
+        <div id="sidebar">
+            <div id="sidebar-header">
+                <span id="sidebar-title">EXPLORER</span>
+                <div id="sidebar-actions">
+                    <button id="sidebar-new-file" title="New File..."><span
+                            class="codicon codicon-new-file"></span></button>
+                    <button id="sidebar-new-folder" title="New Folder..."><span
+                            class="codicon codicon-new-folder"></span></button>
+                    <button id="sidebar-refresh" title="Refresh Explorer"><span
+                            class="codicon codicon-refresh"></span></button>
+                    <button id="sidebar-collapse" title="Collapse Folders in Explorer"><span
+                            class="codicon codicon-collapse-all"></span></button>
+                </div>
+            </div>
+            <div id="search-box" style="display:none;">
+                <input type="text" id="search-input" placeholder="Search files by name">
+            </div>
+            <div id="search-results" style="display:none;"></div>
+            <div id="sidebar-content"></div>
+        </div>
+        <div id="sidebar-resize" class="resize-v"></div>
+
+        <!-- Editor Area -->
+        <div id="editor-area">
+            <div id="tab-bar-wrap">
+                <div id="tab-bar"></div>
+            </div>
+            <div id="breadcrumbs"></div>
+            <div id="editor-container"></div>
+        </div>
+        <div id="right-sidebar-resize" class="resize-v"></div>
+        <div id="right-sidebar" class="right-sidebar-hidden">
+            <div style="padding: 10px 20px; color: var(--breadcrumb-dim); font-size: 12px; text-align: center;">
+                Right sidebar — drag activity bar tabs here.
+            </div>
+        </div>
+        <div id="panel-resize" class="resize-h"></div>
+
+        <!-- Panel -->
+        <div id="panel">
+            <div id="panel-header">
+                <div id="panel-tabs">
+                    <div class="panel-tab active" data-panel="terminal"><span class="codicon codicon-terminal"
+                            style="margin-right:4px"></span>Terminal</div>
+                    <div class="panel-tab" data-panel="problems"><span class="codicon codicon-warning"
+                            style="margin-right:4px"></span>Problems</div>
+                    <div class="panel-tab" data-panel="output"><span class="codicon codicon-output"
+                            style="margin-right:4px"></span>Output</div>
+                    <div class="panel-tab" data-panel="debug-console"><span class="codicon codicon-debug-console"
+                            style="margin-right:4px"></span>Debug Console</div>
+                </div>
+                <div id="panel-actions">
+                    <button class="panel-action" id="btn-maximize-panel" title="Maximize Panel Size"><span
+                            class="codicon codicon-chevron-up"></span></button>
+                    <button class="panel-action" id="btn-close-panel" title="Close Panel"><span
+                            class="codicon codicon-close"></span></button>
+                </div>
+            </div>
+            <div id="panel-content">
+                <div id="terminal-container" class="active"></div>
+                <div id="problems-view" class="panel-view">No problems have been detected in the workspace.</div>
+                <div id="output-view" class="panel-view"></div>
+                <div id="debug-view" class="panel-view"></div>
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div id="status-bar">
+            <div class="status-left">
+                <span class="status-item" id="status-branch" title="Checkout Branch/Tag"><span
+                        class="codicon codicon-source-control" style="margin-right:3px"></span>main</span>
+                <span class="status-item" id="status-sync" title="Synchronize Changes"><span
+                        class="codicon codicon-cloud" style="margin-right:3px"></span></span>
+                <span class="status-item" id="status-diag" title="Problems"><span class="codicon codicon-error"
+                        style="margin-right:2px"></span>0 <span class="codicon codicon-warning"
+                        style="margin:0 2px"></span>0</span>
+            </div>
+            <div class="status-right">
+                <span class="status-item dim" id="status-lncol" title="Go to Line/Column">Ln 1, Col 1</span>
+                <span class="status-item dim" id="status-spaces" title="Select Indentation">Spaces: 4</span>
+                <span class="status-item dim" id="status-encoding" title="Select Encoding">UTF-8</span>
+                <span class="status-item dim" id="status-eol" title="Select End of Line Sequence">LF</span>
+                <span class="status-item dim" id="status-lang" title="Select Language Mode">Plain Text</span>
+                <span class="status-item dim" id="btn-act-bar-pos" title="Toggle activity bar position (Left/Top)">Bar: Left</span>
+                <span class="status-item" id="status-notif" title="No Notifications"><span
+                        class="codicon codicon-bell"></span></span>
+                <span class="status-item" id="status-layout" title="Toggle Panel (Ctrl+J)"><span
+                        class="codicon codicon-layout"></span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Input / Command Palette overlay -->
+    <div id="quick-input">
+        <input type="text" id="quick-input-box" placeholder="Type to search...">
+        <div id="quick-input-list"></div>
+    </div>
+
+    <!-- Debug overlay: bottom-right, toggle with Ctrl+Shift+D -->
+    <div id="wizp-debug"
+        style="position:fixed;bottom:28px;right:8px;z-index:9999;background:#1e1e1ee0;border:1px solid #3c3c3c;border-radius:6px;padding:6px 10px;font-size:11px;font-family:monospace;color:#ccc;max-width:420px;max-height:200px;overflow-y:auto;display:block;backdrop-filter:blur(4px);">
+        <div id="wizp-debug-status" style="padding-bottom:4px;border-bottom:1px solid #3c3c3c;margin-bottom:4px;font-weight:bold;font-size:10px;">● Initializing...</div>
+        <div id="wizp-debug-log" style="font-size:10px;line-height:1.5;"></div>
+    </div>
+    <script>// Debug overlay toggle(Ctrl+Shift+D) handled by logger.ts</script>
+
+    <!-- Monaco Editor: self-contained from local monaco-vs/ directory -->
+    <script>window.MONACO_PATH = "/monaco";</script>
+    <!-- Svelte 5 + runes entry (new Electrobun UI) -->
+ </body>
+
+</html>

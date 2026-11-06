@@ -1,0 +1,14 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Containers: Fixture CLI",
+      "type": "shell",
+      "command": "printf 'container fixture image list\\ncontainer fixture command complete\\n'",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    }
+  ]
+}

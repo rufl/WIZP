@@ -1,0 +1,63 @@
+{
+  "name": "wizp-editor",
+  "displayName": "WIZP Editor",
+  "description": "Daily-driver Monaco code editor powered by Zig daemon. Zig-powered editor with LSP, AI completions, plugin marketplace.",
+  "version": "0.1.0",
+  "publisher": "wizp",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lichforge/wizp"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:wizp.openEditor",
+    "onCommand:wizp.openEditorSide"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "wizp.openEditor",
+        "title": "WIZP: Open Editor",
+        "category": "WIZP"
+      },
+      {
+        "command": "wizp.openEditorSide",
+        "title": "WIZP: Open in Side Panel",
+        "category": "WIZP"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "wizp.openEditor",
+        "key": "ctrl+shift+e",
+        "mac": "cmd+shift+e"
+      }
+    ],
+    "themes": [
+      {
+        "label": "WIZP Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/wizp-dark.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "tsc -p ./",
+    "package": "vsce package --no-dependencies",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0",
+    "@vscode/vsce": "^2.26.0"
+  }
+}

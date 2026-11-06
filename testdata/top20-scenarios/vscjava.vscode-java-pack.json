@@ -1,0 +1,42 @@
+{
+  "extensionId": "vscjava.vscode-java-pack",
+  "lane": "extension pack",
+  "rank": 18,
+  "referenceHost": "MrCode",
+  "scenarios": [
+    {
+      "actions": [
+        "Resolve pack children",
+        "Activate Java child extensions",
+        "Capture visible commands/views"
+      ],
+      "activationEvents": [
+        "workspaceContains:pom.xml"
+      ],
+      "backlogIds": [
+        "T20V-029"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "dependencyGraph",
+        "activationOrder",
+        "commands",
+        "views",
+        "unsupportedChildren",
+        "messages"
+      ],
+      "frontendProbeRequired": true,
+      "fixture": "fixtures/java/pack-rollup",
+      "id": "java-pack-child-rollup",
+      "kind": "pack-policy",
+      "runtimeModes": [
+        "valid-jdk",
+        "missing-jdk"
+      ],
+      "settings": {},
+      "title": "Verify pack-level child activation ordering and rollup state"
+    }
+  ],
+  "schema": "wizp.top20-behavior-scenario.v1",
+  "version": "0.31.1"
+}

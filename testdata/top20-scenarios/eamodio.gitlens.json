@@ -1,0 +1,94 @@
+{
+  "extensionId": "eamodio.gitlens",
+  "lane": "scm/cloud/remote",
+  "rank": 19,
+  "referenceHost": "MrCode",
+  "scenarios": [
+    {
+      "actions": [
+        "Open repo",
+        "Inspect blame",
+        "Open line/file history",
+        "Open commit details",
+        "Compare revisions"
+      ],
+      "activationEvents": [
+        "onStartupFinished"
+      ],
+      "backlogIds": [
+        "T20V-030"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "blameAnnotations",
+        "hovers",
+        "historyViews",
+        "commitDetails",
+        "revisionFiles",
+        "commands",
+        "gitApiCalls"
+      ],
+      "viewProbeIds": [
+        "gitlens.views.repositories",
+        "gitlens.views.commits",
+        "gitlens.views.fileHistory",
+        "gitlens.views.commitDetails",
+        "gitlens.views.timeline"
+      ],
+      "fixture": "fixtures/git/gitlens-repo",
+      "id": "gitlens-real-repo-core",
+      "kind": "scm-view",
+      "runtimeModes": [
+        "valid-git-repo"
+      ],
+      "settings": {},
+      "title": "Verify GitLens real-repository core workflows"
+    },
+    {
+      "actions": [
+        "Block startup network",
+        "Run cloud command",
+        "Capture auth prompt/offline fallback"
+      ],
+      "activationCommands": [
+        "gitlens.connectRemoteProvider",
+        "gitlens.plus.manage",
+        "gitlens.openRepoOnRemote"
+      ],
+      "activationEvents": [
+        "onStartupFinished"
+      ],
+      "backlogIds": [
+        "T20V-031"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "networkAudit",
+        "consentState",
+        "authPrompts",
+        "offlineMessages",
+        "redaction",
+        "commandFailures"
+      ],
+      "viewProbeIds": [
+        "gitlens.views.welcome",
+        "gitlens.views.home",
+        "gitlens.views.graph",
+        "gitlens.views.commitDetails",
+        "gitlens.views.timeline",
+        "gitlens.views.patchDetails"
+      ],
+      "fixture": "fixtures/git/gitlens-offline",
+      "id": "gitlens-cloud-offline",
+      "kind": "network-auth",
+      "runtimeModes": [
+        "offline",
+        "opt-in-network"
+      ],
+      "settings": {},
+      "title": "Verify GitLens auth/cloud/network and offline behavior"
+    }
+  ],
+  "schema": "wizp.top20-behavior-scenario.v1",
+  "version": "2026.6.120634"
+}

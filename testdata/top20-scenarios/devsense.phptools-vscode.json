@@ -1,0 +1,75 @@
+{
+  "extensionId": "devsense.phptools-vscode",
+  "lane": "extension pack",
+  "rank": 10,
+  "referenceHost": "MrCode",
+  "scenarios": [
+    {
+      "actions": [
+        "Open PHP file",
+        "Request diagnostics/completion/hover/symbols/format/code actions"
+      ],
+      "activationEvents": [
+        "onLanguage:php"
+      ],
+      "backlogIds": [
+        "T20V-017"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "diagnostics",
+        "completion",
+        "hover",
+        "symbols",
+        "formatting",
+        "codeActions",
+        "includePathConfig",
+        "outputLogs"
+      ],
+      "fixture": "fixtures/php/phptools-valid",
+      "id": "phptools-valid-language",
+      "kind": "language-provider",
+      "runtimeModes": [
+        "valid-runtime"
+      ],
+      "settings": {
+        "php.executablePath": "${fixtureTools}/php",
+        "php.workspace.includePath": "${fixtureWorkspace}/src"
+      },
+      "title": "Verify PHP language behavior with a valid runtime"
+    },
+    {
+      "actions": [
+        "Resolve launch schema",
+        "Try safe debug config",
+        "Capture messages"
+      ],
+      "activationEvents": [
+        "onDebugInitialConfigurations"
+      ],
+      "backlogIds": [
+        "T20V-018"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "launchSchema",
+        "adapterPath",
+        "messages",
+        "processAudit",
+        "activationErrors"
+      ],
+      "fixture": "fixtures/php/phptools-debug",
+      "id": "phptools-debug-degraded",
+      "kind": "debug-config",
+      "runtimeModes": [
+        "missing-runtime"
+      ],
+      "settings": {
+        "php.executablePath": "/tmp/wizp-missing-php"
+      },
+      "title": "Verify PHP debug metadata and missing-PHP degraded UX"
+    }
+  ],
+  "schema": "wizp.top20-behavior-scenario.v1",
+  "version": "1.70.18966"
+}

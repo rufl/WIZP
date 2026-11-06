@@ -1,0 +1,79 @@
+{
+  "extensionId": "Shopify.ruby-lsp",
+  "lane": "language/tooling",
+  "rank": 8,
+  "referenceHost": "MrCode",
+  "scenarios": [
+    {
+      "actions": [
+        "Open Ruby file",
+        "Request diagnostics/completion/hover/symbols/format/code actions"
+      ],
+      "activationEvents": [
+        "workspaceContains:Gemfile.lock",
+        "onLanguage:ruby"
+      ],
+      "backlogIds": [
+        "T20V-010"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "diagnostics",
+        "completion",
+        "hover",
+        "symbols",
+        "formatting",
+        "codeActions",
+        "outputChannel",
+        "processAudit"
+      ],
+      "fixture": "fixtures/ruby/ruby-lsp-valid",
+      "id": "ruby-lsp-valid-language",
+      "kind": "language-provider",
+      "runtimeModes": [
+        "valid-runtime"
+      ],
+      "settings": {},
+      "title": "Verify valid Ruby LSP language features"
+    },
+    {
+      "actions": [
+        "Activate workspace",
+        "Capture messages",
+        "Run safe commands"
+      ],
+      "activationCommands": [
+        {
+          "command": "rubyLsp.showOutput",
+          "settleMs": 500
+        }
+      ],
+      "activationEvents": [
+        "workspaceContains:Gemfile.lock"
+      ],
+      "backlogIds": [
+        "T20V-011"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "bundleDetection",
+        "messages",
+        "commandResults",
+        "outputChannel",
+        "processAudit"
+      ],
+      "fixture": "fixtures/ruby/missing-ruby",
+      "id": "ruby-lsp-bundler-degraded",
+      "kind": "degraded-runtime",
+      "runtimeModes": [
+        "missing-runtime"
+      ],
+      "settings": {
+        "rubyLsp.rubyExecutablePath": "/tmp/wizp-missing-ruby"
+      },
+      "title": "Verify Bundler/Gemfile and missing-Ruby degraded behavior"
+    }
+  ],
+  "schema": "wizp.top20-behavior-scenario.v1",
+  "version": "0.10.4"
+}

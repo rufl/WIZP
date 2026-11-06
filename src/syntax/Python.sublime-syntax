@@ -1,0 +1,69 @@
+%YAML 1.2
+---
+name: Python
+file_extensions:
+  - py
+  - pyw
+  - pyi
+  - pyx
+scope: source.python
+variables:
+  ident: '[a-zA-Z_][a-zA-Z0-9_]*'
+contexts:
+  main:
+    - match: '#[^\n]*'
+      scope: comment.line.number-sign.python
+    - match: '"""'
+      scope: string.quoted.double.block.python
+      push: string-double-block
+    - match: '"'
+      scope: string.quoted.double.python
+      push: string-double
+    - match: "'''"
+      scope: string.quoted.single.block.python
+      push: string-single-block
+    - match: "'"
+      scope: string.quoted.single.python
+      push: string-single
+    - match: '\b(def|class|if|elif|else|while|for|in|try|except|finally|with|as|import|from|raise|return|yield|break|continue|pass|assert|del|global|nonlocal|lambda|async|await|and|or|not|is|True|False|None)\b'
+      scope: keyword.control.python
+    - match: '\b(int|float|str|bool|list|dict|tuple|set|bytes|bytearray|complex|object|type|super|property|staticmethod|classmethod)\b'
+      scope: storage.type.python
+    - match: '\b(self|cls|__init__|__name__|__main__|__all__|__doc__|__file__|__dict__)\b'
+      scope: variable.language.python
+    - match: '\b([0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?|0[xX][0-9a-fA-F]+|0[oO][0-7]+|0[bB][01]+)\b'
+      scope: constant.numeric.python
+    - match: '{{ident}}\s*(?=\()'
+      scope: entity.name.function.python
+    - match: '@{{ident}}'
+      scope: entity.name.decorator.python
+    - match: '(?<=import\s)({{ident}})'
+      scope: entity.name.namespace.python
+    - match: '\b{{ident}}\b'
+      scope: variable.other.python
+    - match: '[+\-*/%&|^~!<>=@:;,\.(){}[\]]+'
+      scope: keyword.operator.python
+  string-double:
+    - meta_scope: string.quoted.double.python
+    - match: '\\.'
+      scope: constant.character.escape.python
+    - match: '"'
+      scope: string.quoted.double.python
+      pop: true
+  string-single:
+    - meta_scope: string.quoted.single.python
+    - match: '\\.'
+      scope: constant.character.escape.python
+    - match: "'"
+      scope: string.quoted.single.python
+      pop: true
+  string-double-block:
+    - meta_scope: string.quoted.double.block.python
+    - match: '"""'
+      scope: string.quoted.double.block.python
+      pop: true
+  string-single-block:
+    - meta_scope: string.quoted.single.block.python
+    - match: "'''"
+      scope: string.quoted.single.block.python
+      pop: true

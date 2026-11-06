@@ -1,0 +1,51 @@
+%YAML 1.2
+---
+name: C
+file_extensions:
+  - c
+  - h
+scope: source.c
+variables:
+  ident: '[a-zA-Z_][a-zA-Z0-9_]*'
+contexts:
+  main:
+    - match: //[^\n]*
+      scope: comment.line.double-slash.c
+    - match: /\*
+      scope: comment.block.c
+      push:
+        - match: \*/
+          scope: comment.block.c
+          pop: true
+    - match: '"'
+      scope: string.quoted.double.c
+      push: string-double
+    - match: "'\\\\.'"
+      scope: constant.character.c
+    - match: '#\s*(include|define|ifdef|ifndef|if|else|elif|endif|pragma|error|warning|undef|line|define)\b'
+      scope: keyword.control.preprocessor.c
+    - match: '\b(if|else|while|for|do|switch|case|default|break|continue|return|goto|sizeof|typedef|struct|union|enum|static|extern|const|volatile|register|auto|inline|restrict|_Alignas|_Alignof|_Atomic|_Bool|_Complex|_Generic|_Imaginary|_Noreturn|_Static_assert|_Thread_local)\b'
+      scope: keyword.control.c
+    - match: '\b(void|char|short|int|long|float|double|signed|unsigned|_Bool|_Complex|size_t|ssize_t|int8_t|int16_t|int32_t|int64_t|uint8_t|uint16_t|uint32_t|uint64_t|intptr_t|uintptr_t|ptrdiff_t|wchar_t)\b'
+      scope: storage.type.c
+    - match: '\b(NULL|true|false|EXIT_SUCCESS|EXIT_FAILURE|EOF|SEEK_SET|SEEK_CUR|SEEK_END|stdin|stdout|stderr|errno)\b'
+      scope: constant.language.c
+    - match: '\b([0-9]+(?:\.[0-9]+)?(?:[eE][+-]?[0-9]+)?|0[xX][0-9a-fA-F]+|0[oO][0-7]+|0[bB][01]+)(?:[uUlLfF]+)?\b'
+      scope: constant.numeric.c
+    - match: '\b(printf|scanf|malloc|calloc|realloc|free|fopen|fclose|fread|fwrite|fprintf|sprintf|strlen|strcpy|strcat|strcmp|memcpy|memset|memmove|memcmp|atoi|atol|atof|abs|labs|qsort|bsearch|assert|perror|exit|abort)\b'
+      scope: support.function.c
+    - match: '{{ident}}\s*(?=\()'
+      scope: entity.name.function.c
+    - match: '\b{{ident}}\b'
+      scope: variable.other.c
+    - match: '[+\-*/%&|^~!<>=?:;,.(){}[\]]+|->|\.|::'
+      scope: keyword.operator.c
+  string-double:
+    - meta_scope: string.quoted.double.c
+    - match: '\\.'
+      scope: constant.character.escape.c
+    - match: '%[sdifegxXocpn%]'
+      scope: constant.other.placeholder.c
+    - match: '"'
+      scope: string.quoted.double.c
+      pop: true

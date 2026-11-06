@@ -1,0 +1,71 @@
+{
+  "extensionId": "ms-python.debugpy",
+  "lane": "debug/tooling",
+  "rank": 3,
+  "referenceHost": "MrCode",
+  "scenarios": [
+    {
+      "actions": [
+        "Launch debug session",
+        "Set breakpoint",
+        "Evaluate expression",
+        "Terminate"
+      ],
+      "activationEvents": [
+        "onDebugInitialConfigurations"
+      ],
+      "backlogIds": [
+        "T20V-005"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "dapTrace",
+        "breakpointStop",
+        "stack",
+        "scopes",
+        "variables",
+        "evaluate",
+        "debugUiState"
+      ],
+      "fixture": "fixtures/python/debugpy",
+      "id": "debugpy-real-session",
+      "kind": "debug",
+      "runtimeModes": [
+        "valid-runtime"
+      ],
+      "settings": {},
+      "title": "Run a Python debugpy launch session"
+    },
+    {
+      "actions": [
+        "Resolve generated configs",
+        "Validate launch.json",
+        "Inspect debug selector labels"
+      ],
+      "activationEvents": [
+        "onDebugInitialConfigurations"
+      ],
+      "backlogIds": [
+        "T20V-006"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "generatedConfigs",
+        "schemaDiagnostics",
+        "selectorState",
+        "messages"
+      ],
+      "fixture": "fixtures/python/debugpy-config",
+      "id": "debugpy-config-schema",
+      "kind": "debug-config",
+      "runtimeModes": [
+        "valid-runtime",
+        "invalid-config"
+      ],
+      "settings": {},
+      "title": "Verify debugpy generated configs and schema errors"
+    }
+  ],
+  "schema": "wizp.top20-behavior-scenario.v1",
+  "version": "2026.6.0"
+}

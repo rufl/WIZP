@@ -1,0 +1,20 @@
+.{
+    .name = .wizp,
+    .version = "0.1.0",
+    .fingerprint = 0x157f57d6d90baf6f,
+    .minimum_zig_version = "0.17.0",
+    .dependencies = .{
+        .zigpty = .{
+            .url = "https://github.com/pithings/zigpty/archive/60a6002851bbe489ca48c3b1964be34d36e04173.tar.gz",
+            .hash = "zigpty-0.0.0-wfmENlDkAQC7XCLW8R5HLMiVubZjV3Brq1lcA_vATIIU",
+        },
+        .zlay = .{
+            .path = "../../../libraries/ZLAY",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}

@@ -1,0 +1,42 @@
+{
+  "extensionId": "vscjava.vscode-java-debug",
+  "lane": "debug/tooling",
+  "rank": 14,
+  "referenceHost": "MrCode",
+  "scenarios": [
+    {
+      "actions": [
+        "Resolve mainClass",
+        "Launch",
+        "Set breakpoint",
+        "Evaluate",
+        "Terminate"
+      ],
+      "activationEvents": [
+        "onDebugInitialConfigurations"
+      ],
+      "backlogIds": [
+        "T20V-022"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "dapTrace",
+        "breakpoints",
+        "stack",
+        "variables",
+        "evaluate",
+        "termination"
+      ],
+      "fixture": "fixtures/java/debug-main",
+      "id": "java-debug-real-session",
+      "kind": "debug",
+      "runtimeModes": [
+        "valid-jdk"
+      ],
+      "settings": {},
+      "title": "Run a real Java debug session"
+    }
+  ],
+  "schema": "wizp.top20-behavior-scenario.v1",
+  "version": "0.59.0"
+}

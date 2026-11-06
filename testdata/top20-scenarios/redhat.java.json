@@ -1,0 +1,77 @@
+{
+  "extensionId": "redhat.java",
+  "lane": "language/tooling",
+  "rank": 9,
+  "referenceHost": "MrCode",
+  "scenarios": [
+    {
+      "actions": [
+        "Open Java file",
+        "Request diagnostics/completion/hover/definition/references/rename/code actions/formatting/symbols"
+      ],
+      "activationEvents": [
+        "onLanguage:java"
+      ],
+      "backlogIds": [
+        "T20V-008"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "diagnostics",
+        "completion",
+        "hover",
+        "definition",
+        "references",
+        "rename",
+        "codeActions",
+        "formatting",
+        "symbols"
+      ],
+      "fixture": "fixtures/java/jdt-language",
+      "id": "redhat-java-jdt-language",
+      "kind": "language-provider",
+      "runtimeModes": [
+        "valid-jdk"
+      ],
+      "settings": {
+        "java.transport": "stdio"
+      },
+      "title": "Verify valid-JDK JDT language features"
+    },
+    {
+      "actions": [
+        "Activate",
+        "Restart language server",
+        "Change settings",
+        "Clear cache",
+        "Run missing-JDK path"
+      ],
+      "activationEvents": [
+        "workspaceContains:pom.xml"
+      ],
+      "backlogIds": [
+        "T20V-009"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "activationTrace",
+        "languageStatus",
+        "outputChannels",
+        "settingsDiff",
+        "cacheState",
+        "messages"
+      ],
+      "fixture": "fixtures/java/jdt-lifecycle",
+      "id": "redhat-java-lifecycle",
+      "kind": "lifecycle",
+      "runtimeModes": [
+        "valid-jdk",
+        "missing-jdk"
+      ],
+      "settings": {},
+      "title": "Verify JDT lifecycle and missing-JDK UX"
+    }
+  ],
+  "schema": "wizp.top20-behavior-scenario.v1",
+  "version": "1.55.2026060409"
+}

@@ -1,0 +1,68 @@
+{
+  "extensionId": "ms-python.python",
+  "lane": "extension pack",
+  "rank": 2,
+  "referenceHost": "MrCode",
+  "scenarios": [
+    {
+      "actions": [
+        "Resolve extension pack",
+        "Compare dependency graph",
+        "Capture unsupported child messaging"
+      ],
+      "activationEvents": [
+        "onStartupFinished"
+      ],
+      "backlogIds": [
+        "T20V-003"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "dependencyGraph",
+        "unsupportedChildren",
+        "messages",
+        "claimsGuard"
+      ],
+      "fixture": "fixtures/python/pack-policy",
+      "id": "python-pack-dependency-policy",
+      "kind": "pack-policy",
+      "runtimeModes": [
+        "openvsx-pack"
+      ],
+      "settings": {},
+      "title": "Classify Python pack dependencies and Pylance availability"
+    },
+    {
+      "actions": [
+        "Discover interpreters",
+        "Select venv",
+        "Run Python file",
+        "Open terminal"
+      ],
+      "activationEvents": [
+        "onLanguage:python"
+      ],
+      "backlogIds": [
+        "T20V-004"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "interpreterList",
+        "selectedInterpreter",
+        "terminalEnv",
+        "commandOutput",
+        "messages"
+      ],
+      "fixture": "fixtures/python/interpreter-venv",
+      "id": "python-interpreter-workflow",
+      "kind": "valid-runtime",
+      "runtimeModes": [
+        "valid-runtime"
+      ],
+      "settings": {},
+      "title": "Verify interpreter discovery, selection, terminal activation, and run-file"
+    }
+  ],
+  "schema": "wizp.top20-behavior-scenario.v1",
+  "version": "2026.4.0"
+}

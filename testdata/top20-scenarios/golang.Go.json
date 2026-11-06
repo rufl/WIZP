@@ -1,0 +1,77 @@
+{
+  "extensionId": "golang.Go",
+  "lane": "debug/tooling",
+  "rank": 11,
+  "referenceHost": "MrCode",
+  "scenarios": [
+    {
+      "actions": [
+        "Open Go file",
+        "Request diagnostics/completion/hover/definition/references/symbols/format/organize imports"
+      ],
+      "activationEvents": [
+        "workspaceContains:go.mod",
+        "onLanguage:go"
+      ],
+      "backlogIds": [
+        "T20V-020"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "diagnostics",
+        "completion",
+        "hover",
+        "definition",
+        "references",
+        "symbols",
+        "formatting",
+        "organizeImports",
+        "processAudit"
+      ],
+      "fixture": "fixtures/go/gopls-module",
+      "id": "go-gopls-language",
+      "kind": "language-provider",
+      "runtimeModes": [
+        "valid-runtime"
+      ],
+      "settings": {},
+      "title": "Verify valid Go and gopls language behavior"
+    },
+    {
+      "actions": [
+        "Resolve debug config",
+        "Run tests",
+        "Trigger missing-tool prompt"
+      ],
+      "activationCommands": [
+        "go.languageserver.maintain",
+        "go.toggle.gc_details"
+      ],
+      "activationEvents": [
+        "onLanguage:go"
+      ],
+      "backlogIds": [
+        "T20V-021"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "launchConfig",
+        "testResults",
+        "toolPrompt",
+        "networkAudit",
+        "processAudit"
+      ],
+      "fixture": "fixtures/go/debug-test",
+      "id": "go-debug-test-tools",
+      "kind": "debug-test",
+      "runtimeModes": [
+        "valid-runtime",
+        "missing-runtime"
+      ],
+      "settings": {},
+      "title": "Verify Go debug/test/tool install flows without surprise network"
+    }
+  ],
+  "schema": "wizp.top20-behavior-scenario.v1",
+  "version": "0.54.0"
+}

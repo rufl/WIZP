@@ -1,0 +1,45 @@
+{
+  "extensionId": "vscjava.vscode-java-test",
+  "lane": "debug/tooling",
+  "rank": 17,
+  "referenceHost": "MrCode",
+  "scenarios": [
+    {
+      "actions": [
+        "Discover tests",
+        "Run all",
+        "Run failing test",
+        "Debug test where supported",
+        "Rerun"
+      ],
+      "activationEvents": [
+        "onLanguage:java"
+      ],
+      "backlogIds": [
+        "T20V-028"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "testTree",
+        "passFailSkipped",
+        "output",
+        "problemMapping",
+        "rerunState",
+        "uiState"
+      ],
+      "viewProbeIds": [
+        "testing"
+      ],
+      "fixture": "fixtures/java/junit-tests",
+      "id": "java-test-discovery-run",
+      "kind": "test",
+      "runtimeModes": [
+        "valid-jdk"
+      ],
+      "settings": {},
+      "title": "Verify Java test discovery and run results"
+    }
+  ],
+  "schema": "wizp.top20-behavior-scenario.v1",
+  "version": "0.45.0"
+}

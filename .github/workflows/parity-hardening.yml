@@ -1,0 +1,343 @@
+name: WIZP Parity Hardening
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3 * * 1'
+
+jobs:
+  native-ui-baseline:
+    name: Linux Packaged-Native UI Baseline
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: mlugg/setup-zig@v1
+        with:
+          version: '0.17.0'
+      - name: Install build and native evidence dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick openbox tesseract-ocr xdotool xvfb zenity
+          cd wizp
+          npm ci
+          cd frontend
+          npm ci
+      - name: Build self-contained Linux package
+        run: cd wizp && npm run build:self-contained
+      - name: Run isolated packaged-native baseline
+        run: cd wizp && WIZP_VIRTUAL_SCREEN=1920x1080x24 npm run test:native-ui-baseline -- --duration 60
+      - name: Run isolated packaged-native Settings journey
+        run: cd wizp && WIZP_VIRTUAL_SCREEN=1280x820x24 npm run test:native-settings
+      - name: Validate packaged-native Settings evidence
+        run: cd wizp && npm run check:native-settings-report
+      - name: Run isolated packaged-native Explorer journey
+        run: cd wizp && WIZP_VIRTUAL_SCREEN=1280x820x24 npm run test:native-explorer
+      - name: Validate packaged-native Explorer evidence
+        run: cd wizp && npm run check:native-explorer-report
+      - name: Run isolated packaged-native Search journey
+        run: cd wizp && WIZP_VIRTUAL_SCREEN=1280x820x24 npm run test:native-search
+      - name: Validate packaged-native Search evidence
+        run: cd wizp && npm run check:native-search-report
+      - name: Run isolated packaged-native editor journey
+        run: cd wizp && WIZP_VIRTUAL_SCREEN=1280x820x24 npm run test:native-editor:scheduled
+      - name: Validate packaged-native editor evidence
+        run: cd wizp && npm run check:native-editor-report
+      - name: Run isolated packaged-native SCM journey
+        run: cd wizp && WIZP_VIRTUAL_SCREEN=1280x820x24 npm run test:native-scm
+      - name: Validate packaged-native SCM evidence
+        run: cd wizp && npm run check:native-scm-report
+      - name: Run isolated packaged-native Debug journey
+        run: cd wizp && WIZP_VIRTUAL_SCREEN=1280x820x24 npm run test:native-debug
+      - name: Validate packaged-native Debug evidence
+        run: cd wizp && npm run check:native-debug-report
+      - name: Run isolated packaged-native Extensions journey
+        run: cd wizp && WIZP_VIRTUAL_SCREEN=1280x820x24 npm run test:native-extensions
+      - name: Validate packaged-native Extensions evidence
+        run: cd wizp && npm run check:native-extensions-report
+      - name: Run isolated packaged-native Terminal journey
+        run: cd wizp && WIZP_VIRTUAL_SCREEN=1280x820x24 npm run test:native-terminal
+      - name: Validate packaged-native Terminal evidence
+        run: cd wizp && npm run check:native-terminal-report
+      - name: Upload native baseline evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-ui-baseline-evidence
+          path: wizp/build/ui-ux/native-baseline
+      - name: Upload native Settings evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-settings-evidence
+          path: wizp/build/ui-ux/native-settings
+      - name: Upload native Explorer evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-explorer-evidence
+          path: wizp/build/ui-ux/native-explorer
+      - name: Upload native Search evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-search-evidence
+          path: wizp/build/ui-ux/native-search
+      - name: Upload native editor evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-editor-evidence
+          path: wizp/build/ui-ux/native-editor
+      - name: Upload remaining native journey evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-primary-journey-evidence
+          path: |
+            wizp/build/ui-ux/native-scm
+            wizp/build/ui-ux/native-debug
+            wizp/build/ui-ux/native-extensions
+            wizp/build/ui-ux/native-terminal
+
+  real-extension-smoke:
+    name: Real Extension Smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: mlugg/setup-zig@v1
+        with:
+          version: '0.17.0'
+      - name: Restore stress trend history
+        uses: actions/cache@v4
+        with:
+          path: wizp/build/parity-stress/history
+          key: stress-trend-history-${{ github.ref_name }}-${{ github.run_id }}
+          restore-keys: |
+            stress-trend-history-${{ github.ref_name }}-
+      - name: Install dependencies
+        run: |
+          cd wizp
+          npm ci
+          cd frontend
+          npm ci
+      - name: Build WIZP
+        run: cd wizp && zig build -Doptimize=ReleaseSafe -Dtarget=x86_64-linux-gnu
+      - name: Download and verify real extension packages
+        run: cd wizp && WIZP_REAL_EXTENSION_NETWORK=1 WIZP_REAL_EXTENSION_LOAD=1 WIZP_REAL_EXTENSION_RUNTIME=1 scripts/parity_real_extension_smoke.py
+      - name: Upload real extension report
+        uses: actions/upload-artifact@v4
+        with:
+          name: parity-real-extension-report
+          path: wizp/build/parity-real-extensions/real-extension-report.json
+
+  cross-os-package-smoke:
+    name: Cross-OS Package Smoke (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: mlugg/setup-zig@v1
+        with:
+          version: '0.17.0'
+      - name: Install dependencies
+        shell: bash
+        run: |
+          cd wizp
+          npm ci
+          cd frontend
+          npm ci
+      - name: Build frontend
+        shell: bash
+        run: cd wizp && npm run build:frontend
+      - name: Build WIZP
+        shell: bash
+        run: cd wizp && zig build -Doptimize=ReleaseSafe
+      - name: Build native Electrobun package
+        if: runner.os != 'Linux'
+        shell: bash
+        env:
+          WIZP_HOST_WEBVIEW: '1'
+        run: cd wizp && npm run build:electrobun
+      - name: Verify package startup and surfaces
+        shell: bash
+        run: |
+          cd wizp
+          package_arg=
+          if [ "$RUNNER_OS" != "Linux" ]; then package_arg=--native-package-smoke; fi
+          python scripts/parity_cross_os_package_smoke.py --expected-runner "${{ matrix.os }}" $package_arg
+      - name: Upload package smoke report
+        uses: actions/upload-artifact@v4
+        with:
+          name: parity-package-report-${{ matrix.os }}
+          path: |
+            wizp/build/parity-package/cross-os-package-report.json
+            wizp/build/dev-*
+
+  stress-budgets:
+    name: Stress Budget Report
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: mlugg/setup-zig@v1
+        with:
+          version: '0.17.0'
+      - name: Restore stress trend history
+        uses: actions/cache@v4
+        with:
+          path: wizp/build/parity-stress/history
+          key: stress-trend-history-${{ github.ref_name }}-${{ github.run_id }}
+          restore-keys: |
+            stress-trend-history-${{ github.ref_name }}-
+      - name: Install dependencies
+        run: |
+          cd wizp
+          npm ci
+          cd frontend
+          npm ci
+      - name: Build and collect three parity stress samples
+        run: |
+          cd wizp
+          zig build -Doptimize=ReleaseSafe -Dtarget=x86_64-linux-gnu
+          for sample in 1 2 3; do
+            echo "stress sample $sample/3"
+            scripts/parity_stress_smoke.py
+            npm run report:stress-trend -- --record-history
+          done
+      - name: Upload stress report
+        uses: actions/upload-artifact@v4
+        with:
+          name: parity-stress-report
+          path: wizp/build/parity-stress
+
+  network-policy:
+    name: Network Policy Report
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: mlugg/setup-zig@v1
+        with:
+          version: '0.17.0'
+      - name: Install dependencies
+        run: cd wizp && npm ci
+      - name: Build WIZP
+        run: cd wizp && zig build -Doptimize=ReleaseSafe -Dtarget=x86_64-linux-gnu
+      - name: Generate network policy report
+        run: cd wizp && npm run report:network-policy
+      - name: Upload network policy report
+        uses: actions/upload-artifact@v4
+        with:
+          name: network-policy-report
+          path: wizp/build/release/network-policy-report.json
+
+  api-drift:
+    name: VS Code API Drift Report
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check core/extension boundary
+        run: cd wizp && python3 scripts/check_core_extension_boundary.py
+      - name: Install dependencies
+        run: cd wizp && npm ci
+      - name: Generate API drift report
+        run: cd wizp && npm run report:api-drift
+      - name: Upload API drift report
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-drift-report
+          path: wizp/build/vscode-parity/api-drift-report.json
+
+  beta-readiness-report:
+    name: Beta Readiness Report
+    runs-on: ubuntu-latest
+    needs: [real-extension-smoke, cross-os-package-smoke, stress-budgets, network-policy, api-drift]
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Validate release evidence handoff
+        run: cd wizp && python3 scripts/check_release_evidence_runbook.py
+      - name: Test beta readiness contract
+        run: cd wizp && npm run test:beta-readiness
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: parity-real-extension-report
+          path: wizp/build/parity-real-extensions
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: parity-package-report-*
+          path: wizp/build/parity-package
+      - name: Validate cross-OS package artifacts
+        run: cd wizp && python3 scripts/cross_os_artifact_report.py || true
+      - name: Check cross-OS artifact contract
+        continue-on-error: true
+        run: cd wizp && npm run check:cross-os-artifacts
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: parity-stress-report
+          path: wizp/build/parity-stress
+      - name: Check stress history contract
+        continue-on-error: true
+        run: cd wizp && npm run test:stress-ci-history
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: network-policy-report
+          path: wizp/build/release
+      - uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: api-drift-report
+          path: wizp/build/vscode-parity
+      - name: Generate beta readiness report
+        run: cd wizp && python scripts/beta_readiness_report.py
+      - name: Validate beta readiness report
+        run: cd wizp && npm run check:beta-readiness
+      - name: Validate beta handoff artifact bundle
+        run: cd wizp && npm run check:beta-handoff
+      - name: Upload beta readiness report
+        uses: actions/upload-artifact@v4
+        with:
+          name: beta-readiness-report
+          path: |
+            wizp/build/release/beta-readiness.json
+            wizp/build/parity-package/cross-os-artifact-report.json
+            wizp/build/parity-stress/stress-trend-report.json

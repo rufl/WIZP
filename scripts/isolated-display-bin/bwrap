@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+
+# The host KDE service advertises org.freedesktop.Notifications and can be
+# auto-started by Chromium during a native smoke test. Mask that service in
+# the private mount namespace; otherwise the runner may SIGKILL dbus-daemon
+# during teardown and invalidate an otherwise clean report.
+exec /usr/bin/bwrap \
+    --ro-bind-try /dev/null /usr/share/dbus-1/services/org.kde.plasma.Notifications.service \
+    "$@"

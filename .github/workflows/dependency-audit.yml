@@ -1,0 +1,26 @@
+name: WIZP Dependency Audit
+
+on:
+  schedule:
+    - cron: '17 4 * * 1'
+  workflow_dispatch:
+
+jobs:
+  dependency-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm ci
+      - run: cd frontend && npm ci
+      - run: npm audit --audit-level=high
+      - run: python3 scripts/dependency_update_report.py --network
+      - run: node scripts/verify-package-age.js build/parity-package/dependency-age-report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wizp-dependency-update-report
+          path: build/parity-package/dependency-*-report.json

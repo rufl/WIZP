@@ -1,0 +1,25 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Maven: Fixture Verify",
+      "type": "shell",
+      "command": "printf 'src/main/java/App.java:7:maven fixture warning\\nmaven fixture task complete\\n'",
+      "group": "build",
+      "problemMatcher": {
+        "owner": "maven-fixture",
+        "fileLocation": ["relative", "${workspaceFolder}"],
+        "pattern": {
+          "regexp": "^(.*):(\\\\d+):(.*)$",
+          "file": 1,
+          "line": 2,
+          "message": 3
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    }
+  ]
+}

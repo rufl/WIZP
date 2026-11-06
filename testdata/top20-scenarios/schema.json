@@ -1,0 +1,156 @@
+{
+  "$id": "https://wizp.local/schemas/top20-behavior-scenario.v1.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "extensionId": {
+      "type": "string"
+    },
+    "lane": {
+      "type": "string"
+    },
+    "rank": {
+      "maximum": 20,
+      "minimum": 1,
+      "type": "integer"
+    },
+    "referenceHost": {
+      "type": "string"
+    },
+    "scenarios": {
+      "items": {
+        "properties": {
+          "actions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "activationCommands": {
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "properties": {
+                    "allowDisabled": {
+                      "type": "boolean"
+                    },
+                    "args": {
+                      "type": "array"
+                    },
+                    "command": {
+                      "type": "string"
+                    },
+                    "settleMs": {
+                      "minimum": 0,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "command"
+                  ],
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "activationEvents": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "backlogIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "currentStatus": {
+            "enum": [
+              "planned",
+              "partial",
+              "verified",
+              "unsupported",
+              "blocked"
+            ]
+          },
+          "expectedEvidence": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "fixture": {
+            "type": "string"
+          },
+          "frontendProbeRequired": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "notes": {
+            "type": "string"
+          },
+          "probeFile": {
+            "type": "string"
+          },
+          "runtimeModes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "settings": {
+            "type": "object"
+          },
+          "title": {
+            "type": "string"
+          },
+          "viewProbeIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "backlogIds",
+          "kind",
+          "currentStatus",
+          "fixture",
+          "activationEvents",
+          "actions",
+          "expectedEvidence"
+        ],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "schema": {
+      "const": "wizp.top20-behavior-scenario.v1"
+    },
+    "version": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema",
+    "extensionId",
+    "rank",
+    "lane",
+    "version",
+    "scenarios"
+  ],
+  "title": "WIZP top-20 behavior parity scenario manifest",
+  "type": "object"
+}

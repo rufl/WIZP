@@ -1,0 +1,4 @@
+{
+  "composer.bin": "${fixtureTools}/composer",
+  "php.executablePath": "${fixtureTools}/php"
+}

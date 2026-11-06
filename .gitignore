@@ -1,0 +1,31 @@
+# Build outputs
+zig-out/
+.zig-cache/
+*.o
+
+# Dependencies
+node_modules/
+
+# Python caches
+__pycache__/
+
+# Editor
+*.swp
+*~
+.DS_Store
+
+# VSIX packages
+*.vsix
+
+# Extension build artifacts (rebuilt by build-vsix.sh)
+extension/bin/
+extension/dist/
+
+# Bundled frontend (generated at build time with -DWIZP_BUNDLED_FRONTEND=true)
+src/bundle.js
+src/index.bundled.html
+
+# Upstream sources (managed by scripts/get_upstream.sh)
+vscode-upstream/
+monaco-upstream/
+upstream/vscode.json

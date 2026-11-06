@@ -1,0 +1,54 @@
+{
+  "extensionId": "devsense.profiler-php-vscode",
+  "lane": "debug/tooling",
+  "rank": 7,
+  "referenceHost": "MrCode",
+  "scenarios": [
+    {
+      "actions": [
+        "Open profiler sample",
+        "Inspect tree/timeline/details",
+        "Execute safe profiler commands"
+      ],
+      "activationCommands": [
+        {
+          "allowDisabled": true,
+          "args": [
+            {
+              "openInEditor": true,
+              "path": "${fixtureFile}"
+            }
+          ],
+          "command": "phpprofiler.loadprofile",
+          "settleMs": 1500
+        }
+      ],
+      "activationEvents": [
+        "onCommand:phpprofiler.loadprofile"
+      ],
+      "backlogIds": [
+        "T20V-016"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "customEditorDom",
+        "treeState",
+        "timelineState",
+        "decorations",
+        "webviewMessages",
+        "resourcePolicy"
+      ],
+      "fixture": "fixtures/php/profiler-sample",
+      "id": "php-profiler-custom-editor",
+      "kind": "custom-editor",
+      "probeFile": "sample.callgrind",
+      "runtimeModes": [
+        "valid-fixture"
+      ],
+      "settings": {},
+      "title": "Verify profiler custom editor and command behavior"
+    }
+  ],
+  "schema": "wizp.top20-behavior-scenario.v1",
+  "version": "1.70.18966"
+}

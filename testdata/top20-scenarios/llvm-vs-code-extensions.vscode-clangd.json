@@ -1,0 +1,103 @@
+{
+  "extensionId": "llvm-vs-code-extensions.vscode-clangd",
+  "lane": "language/tooling",
+  "rank": 15,
+  "referenceHost": "MrCode",
+  "scenarios": [
+    {
+      "actions": [
+        "Open C++ file",
+        "Request diagnostics/completion/hover/definition/symbols/format/code actions"
+      ],
+      "activationEvents": [
+        "onLanguage:cpp"
+      ],
+      "activationSettleMs": 30000,
+      "env": {
+        "WIZP_EXTENSION_APP_NAME": "MrCode"
+      },
+      "probeTimeoutMs": 60000,
+      "providerRegistrationWaitMs": 30000,
+      "providerRpcTimeoutMs": 30000,
+      "providerPointOverrides": {
+        "completion": {
+          "character": 11,
+          "line": 10,
+          "symbol": "co"
+        }
+      },
+      "providerProbe": {
+        "completionSampleCount": 3,
+        "completionSampleDelayMs": 250,
+        "completionStabilityMinPrefix": 10,
+        "completionStabilityMinReferenceLabels": 25,
+        "completionStabilityMinSharedLabels": 50,
+        "completionStabilityMinSharedRatio": 0.9,
+        "completionStabilityRuns": 3
+      },
+      "backlogIds": [
+        "T20V-025"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "diagnostics",
+        "completion",
+        "hover",
+        "definition",
+        "symbols",
+        "formatting",
+        "codeActions",
+        "processAudit"
+      ],
+      "fixture": "fixtures/cpp/clangd-valid",
+      "id": "clangd-valid-language",
+      "kind": "language-provider",
+      "runtimeModes": [
+        "valid-runtime"
+      ],
+      "settings": {
+        "clangd.path": "${fixtureTools}/clangd"
+      },
+      "title": "Verify valid clangd language behavior"
+    },
+    {
+      "actions": [
+        "Open project with compile_commands.json",
+        "Capture output/messages"
+      ],
+      "activationEvents": [
+        "onLanguage:cpp"
+      ],
+      "backlogIds": [
+        "T20V-026"
+      ],
+      "activationSettleMs": 15000,
+      "env": {
+        "WIZP_EXTENSION_APP_NAME": "MrCode",
+        "WIZP_EXTENSION_NETWORK_ALLOWLIST": "api.github.com"
+      },
+      "probeTimeoutMs": 30000,
+      "providerRegistrationWaitMs": 15000,
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "compileDatabaseDiscovery",
+        "messages",
+        "outputLogs",
+        "processAudit",
+        "hostResponsiveness"
+      ],
+      "fixture": "fixtures/cpp/clangd-missing",
+      "id": "clangd-compile-db-degraded",
+      "kind": "degraded-runtime",
+      "runtimeModes": [
+        "missing-runtime"
+      ],
+      "settings": {
+        "clangd.path": "/tmp/wizp-missing-clangd"
+      },
+      "title": "Verify compile database discovery and missing-clangd UX"
+    }
+  ],
+  "schema": "wizp.top20-behavior-scenario.v1",
+  "version": "0.6.0"
+}

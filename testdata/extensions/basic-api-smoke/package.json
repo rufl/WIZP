@@ -1,0 +1,330 @@
+{
+  "name": "basic-api-smoke",
+  "displayName": "Basic API Smoke",
+  "version": "0.0.1",
+  "publisher": "wizp",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "activationEvents": [
+    "onCommand:basic-api-smoke.run",
+    "onCommand:basic-api-smoke.enabledOnly",
+    "onCommand:basic-api-smoke.menuCommand",
+    "onCommand:basic-api-smoke.keybindingCommand",
+    "onCommand:basic-api-smoke.diagnostics",
+    "onCommand:basic-api-smoke.fsProvider",
+    "onCommand:basic-api-smoke.workspaceEdit",
+    "onCommand:basic-api-smoke.saveParticipant",
+    "onCommand:basic-api-smoke.commentsLifecycle",
+    "onCommand:basic-api-smoke.decorations",
+    "onCommand:basic-api-smoke.apiPrimitives",
+    "onCommand:basic-api-smoke.terminalShellIntegration",
+    "onCommand:basic-api-smoke.extensionContext",
+    "onCommand:basic-api-smoke.codeLensSetup",
+    "onCommand:basic-api-smoke.inlayHintsSetup",
+    "onCommand:basic-api-smoke.semanticTokensSetup",
+    "onCommand:basic-api-smoke.foldingRangesSetup",
+    "onCommand:basic-api-smoke.languageProvidersSetup",
+    "onCommand:basic-api-smoke.languageProvidersMoreSetup",
+    "onCommand:basic-api-smoke.hierarchyProvidersSetup",
+    "onCommand:basic-api-smoke.diagnosticsLifecycle",
+    "onCommand:basic-api-smoke.longTailApis"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "basic-api-smoke.run",
+        "title": "Basic API Smoke: Run"
+      },
+      {
+        "command": "basic-api-smoke.enabledOnly",
+        "title": "Basic API Smoke: Enabled Only",
+        "enablement": "basicApiSmoke.enabled && resourceLangId == zig"
+      },
+      {
+        "command": "basic-api-smoke.menuCommand",
+        "title": "Basic API Smoke: Menu Command"
+      },
+      {
+        "command": "basic-api-smoke.keybindingCommand",
+        "title": "Basic API Smoke: Keybinding Command"
+      },
+      {
+        "command": "basic-api-smoke.diagnostics",
+        "title": "Basic API Smoke: Diagnostics"
+      },
+      {
+        "command": "basic-api-smoke.fsProvider",
+        "title": "Basic API Smoke: File System Provider"
+      },
+      {
+        "command": "basic-api-smoke.workspaceEdit",
+        "title": "Basic API Smoke: Workspace Edit"
+      },
+      {
+        "command": "basic-api-smoke.saveParticipant",
+        "title": "Basic API Smoke: Save Participant"
+      },
+      {
+        "command": "basic-api-smoke.commentsLifecycle",
+        "title": "Basic API Smoke: Comments Lifecycle"
+      },
+      {
+        "command": "basic-api-smoke.decorations",
+        "title": "Basic API Smoke: Decorations"
+      },
+      {
+        "command": "basic-api-smoke.apiPrimitives",
+        "title": "Basic API Smoke: API Primitives"
+      },
+      {
+        "command": "basic-api-smoke.terminalShellIntegration",
+        "title": "Basic API Smoke: Terminal Shell Integration"
+      },
+      {
+        "command": "basic-api-smoke.extensionContext",
+        "title": "Basic API Smoke: Extension Context"
+      },
+      {
+        "command": "basic-api-smoke.codeLensSetup",
+        "title": "Basic API Smoke: Code Lens Setup"
+      },
+      {
+        "command": "basic-api-smoke.inlayHintsSetup",
+        "title": "Basic API Smoke: Inlay Hints Setup"
+      },
+      {
+        "command": "basic-api-smoke.semanticTokensSetup",
+        "title": "Basic API Smoke: Semantic Tokens Setup"
+      },
+      {
+        "command": "basic-api-smoke.foldingRangesSetup",
+        "title": "Basic API Smoke: Folding Ranges Setup"
+      },
+      {
+        "command": "basic-api-smoke.languageProvidersSetup",
+        "title": "Basic API Smoke: Language Providers Setup"
+      },
+      {
+        "command": "basic-api-smoke.languageProvidersMoreSetup",
+        "title": "Basic API Smoke: More Language Providers Setup"
+      },
+      {
+        "command": "basic-api-smoke.hierarchyProvidersSetup",
+        "title": "Basic API Smoke: Hierarchy Providers Setup"
+      },
+      {
+        "command": "basic-api-smoke.diagnosticsLifecycle",
+        "title": "Basic API Smoke: Diagnostics Lifecycle"
+      },
+      {
+        "command": "basic-api-smoke.longTailApis",
+        "title": "Basic API Smoke: Long Tail APIs"
+      }
+    ],
+    "languages": [
+      {
+        "id": "smokelang",
+        "aliases": ["SmokeLang", "smoke"],
+        "extensions": [".smoke"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "smokelang",
+        "scopeName": "source.smoke",
+        "path": "./syntaxes/smokelang.tmLanguage.json"
+      }
+    ],
+    "themes": [
+      {
+        "id": "smoke-dark",
+        "label": "Smoke Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/smoke-dark-color-theme.json"
+      }
+    ],
+    "iconThemes": [
+      {
+        "id": "smoke-icons",
+        "label": "Smoke Icons",
+        "path": "./icons/smoke-icon-theme.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "smokelang",
+        "path": "./snippets/smokelang.code-snippets"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "basic-api-smoke-container",
+          "title": "Smoke",
+          "icon": "./media/smoke.svg"
+        }
+      ]
+    },
+    "views": {
+      "basic-api-smoke-container": [
+        {
+          "id": "basic-api-smoke-view",
+          "name": "Smoke View",
+          "when": "basicApiSmoke.enabled"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "basic-api-smoke-view",
+        "contents": "Welcome to the smoke view.",
+        "when": "basicApiSmoke.enabled"
+      }
+    ],
+    "breakpoints": [
+      {
+        "language": "smokelang"
+      }
+    ],
+    "jsonValidation": [
+      {
+        "fileMatch": ["*.smoke.json"],
+        "url": "./schemas/smoke.schema.json"
+      }
+    ],
+    "resourceLabelFormatters": [
+      {
+        "scheme": "memfs",
+        "formatting": {
+          "label": "${path}",
+          "separator": "/",
+          "workspaceSuffix": "mem"
+        }
+      }
+    ],
+    "problemMatchers": [
+      {
+        "name": "smoke-problem",
+        "label": "Smoke Problem Matcher",
+        "owner": "smokelang",
+        "source": "smoke",
+        "pattern": {
+          "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "severity": 4,
+          "message": 5
+        }
+      }
+    ],
+    "taskDefinitions": [
+      {
+        "type": "smokeTask",
+        "required": ["script"],
+        "properties": {
+          "script": {
+            "type": "string",
+            "description": "Smoke task script name."
+          }
+        }
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "smoke-debug",
+        "label": "Smoke Debug",
+        "program": "./debugAdapters/smokeDebug.js",
+        "runtime": "node",
+        "languages": ["smokelang"],
+        "when": "basicApiSmoke.enabled",
+        "hiddenWhen": "false",
+        "deprecated": "Smoke debugger is retained for contribution snapshot parity.",
+        "variables": {
+          "pickSmokeProcess": "basic-api-smoke.pickProcess"
+        },
+        "configurationSnippets": [
+          {
+            "label": "Smoke Launch",
+            "description": "Launch the smoke debugger.",
+            "body": {
+              "type": "smoke-debug",
+              "request": "launch",
+              "name": "Smoke Debug",
+              "program": "${file}"
+            }
+          }
+        ],
+        "configurationAttributes": {
+          "launch": {
+            "required": ["program"],
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "Smoke program."
+              }
+            }
+          }
+        }
+      }
+    ],
+    "walkthroughs": {
+      "smokeWalkthrough": {
+        "title": "Smoke Walkthrough",
+        "description": "Fixture walkthrough for WIZP onboarding parity.",
+        "steps": [
+          {
+            "id": "smoke.step",
+            "title": "Run Smoke",
+            "description": "Run the basic smoke command.",
+            "completionEvents": ["onCommand:basic-api-smoke.run"]
+          }
+        ]
+      }
+    },
+    "menus": {
+      "editor/context": [
+        {
+          "command": "basic-api-smoke.menuCommand",
+          "when": "basicApiSmoke.enabled && resourceLangId == zig",
+          "group": "navigation@1",
+          "alt": "basic-api-smoke.keybindingCommand",
+          "args": ["from-menu"]
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "basic-api-smoke.keybindingCommand",
+        "key": "ctrl+alt+w",
+        "linux": "ctrl+alt+w",
+        "mac": "cmd+alt+w",
+        "win": "ctrl+alt+w",
+        "when": "basicApiSmoke.enabled && resourceLangId == zig"
+      }
+    ],
+    "configuration": {
+      "title": "Basic API Smoke",
+      "properties": {
+        "basicApiSmoke.enabledSetting": {
+          "type": "boolean",
+          "default": true,
+          "description": "Fixture setting for VS Code configuration parity."
+        },
+        "basicApiSmoke.currentLine.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Fixture nested configuration default."
+        },
+        "basicApiSmoke.currentLine.format": {
+          "type": "string",
+          "default": "smoke-current-line-default",
+          "description": "Fixture nested string configuration default."
+        }
+      }
+    }
+  }
+}

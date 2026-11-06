@@ -1,0 +1,153 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-sidebar: var(--sidebar-bg);
+  --color-sidebar-fg: var(--sidebar-fg);
+  --color-panel: var(--panel-bg);
+  --color-border: var(--panel-border);
+  --color-titlebar: var(--titlebar-bg);
+  --color-titlebar-fg: var(--titlebar-fg);
+  --color-activity: var(--activity-bar-bg);
+  --color-activity-fg: var(--activity-bar-fg);
+  --color-activity-inactive: var(--activity-bar-inactive-fg);
+  --color-dim: var(--breadcrumb-dim);
+  --color-accent: var(--accent);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-error: var(--error);
+  --color-info: var(--info);
+  --color-warn: var(--warn);
+}
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 13px;
+    color: var(--fg, #ccc);
+    background: var(--bg, #1e1e1e);
+    letter-spacing: -0.01em;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    @apply antialiased;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--focus-ring, var(--accent));
+    outline-offset: 2px;
+  }
+}
+
+:root {
+  --activity-inactive: #9ca3af;
+  --breadcrumb-dim: #9ca3af;
+  --panel-border: #27272a;
+  --sidebar-fg: #a1a1aa;
+  --error: #f87171;
+  --warn: #fbbf24;
+  --info: #60a5fa;
+  --accent: #3b82f6;
+  --fg: #e4e4e7;
+  --bg: #09090b;
+  --sidebar-bg: #18181b;
+  --editor-bg: #18181b;
+  --editor-selection: #27272a;
+  --panel-bg: #18181b;
+  --titlebar-bg: #09090b;
+  --titlebar-fg: #a1a1aa;
+  --activity-bar-bg: #09090b;
+  --activity-bar-fg: #e4e4e7;
+  --activity-bar-inactive-fg: #a1a1aa;
+  --status-bar-bg: #09090b;
+  --status-bar-fg: #a1a1aa;
+  --status-bar-dim: #a1a1aa;
+  --tab-active-bg: #27272a;
+  --tab-active-fg: #e4e4e7;
+  --tab-inactive-fg: #a1a1aa;
+  --popover: #18181b;
+  --popover-foreground: #e4e4e7;
+  --popover-bg: #18181b;
+  --border: #27272a;
+  --breadcrumb-bg: #18181b;
+  --focus-ring: #60a5fa;
+  --control-bg: color-mix(in srgb, var(--fg) 7%, var(--panel-bg));
+  --control-hover-bg: color-mix(in srgb, var(--fg) 12%, var(--panel-bg));
+  --control-border: color-mix(in srgb, var(--fg) 56%, var(--panel-bg));
+  color-scheme: dark;
+}
+
+* {
+  scrollbar-color: var(--scrollbar-fg, #52525b) transparent;
+  scrollbar-width: thin;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 42%, transparent);
+}
+
+.workbench,
+.workbench-main,
+.workbench-center {
+  min-width: 0;
+  min-height: 0;
+}
+
+.primary-sidebar,
+.secondary-sidebar {
+  min-width: 0;
+}
+
+@media (max-width: 1100px) {
+  .secondary-sidebar,
+  .secondary-sidebar-resizer {
+    display: none !important;
+  }
+
+  .primary-sidebar {
+    max-width: min(var(--sidebar-width), 34vw);
+  }
+}
+
+@media (max-width: 760px) {
+  .primary-sidebar {
+    max-width: min(var(--sidebar-width), 42vw);
+  }
+}
+
+html[data-ui-scale='large'] .secondary-sidebar,
+html[data-ui-scale='large'] .secondary-sidebar-resizer {
+  display: none !important;
+}
+
+html[data-ui-scale='large'] .primary-sidebar {
+  max-width: min(var(--sidebar-width), 38vw);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

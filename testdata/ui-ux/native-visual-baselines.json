@@ -1,0 +1,193 @@
+{
+  "schema": "wizp.native-visual-baselines.v1",
+  "status": "automation-assisted-reviewed",
+  "platform": "linux",
+  "renderer": "cef",
+  "reviewedAt": "2026-09-22",
+  "reviewedBy": "OpenAI Codex visual inspection",
+  "manualHumanReviewComplete": false,
+  "scope": "Retained packaged-native Linux frames for UI-NATIVE-006 through UI-NATIVE-013; capture dimensions are recorded per artifact.",
+  "caveats": [
+    "These checksums preserve reviewed Linux packaged-native frames; they do not claim macOS or Windows rendering.",
+    "Automation-assisted visual inspection does not replace human release-candidate or assistive-technology sign-off.",
+    "High-DPI, large-text, pseudo-localization, extension-theme, and dynamic-theme baselines remain open."
+  ],
+  "baselines": [
+    {
+      "journey": "editor",
+      "backlogId": "UI-NATIVE-006",
+      "state": "close-all-returned-welcome",
+      "visual": {
+        "theme": "default-dark",
+        "scale": 1,
+        "locale": "en-US",
+        "viewport": { "width": 1280, "height": 797 }
+      },
+      "requiredCheck": "closeAllEditorsReturnedWelcome",
+      "screenshot": {
+        "path": "build/ui-ux/native-editor/20260812T203615Z-1613262-09-close-all.png",
+        "sha256": "616cefb4e05db9b03496db43ba2b49aa3c80308b60a1e1a0e64fd3d54d00e82b",
+        "width": 1280,
+        "height": 797
+      },
+      "report": {
+        "path": "build/ui-ux/native-editor/report.json",
+        "sha256": "74a438b82c621cf7599f7ec9fbb9e476cbf51030d57bbf4cf2bc227c47e721e8"
+      }
+    },
+    {
+      "journey": "explorer",
+      "backlogId": "UI-NATIVE-007",
+      "state": "tree-outline-and-editor-final",
+      "visual": {
+        "theme": "default-dark",
+        "scale": 1,
+        "locale": "en-US",
+        "viewport": { "width": 1280, "height": 797 }
+      },
+      "requiredCheck": "outlineNavigated",
+      "screenshot": {
+        "path": "build/ui-ux/native-explorer/20260812T221451Z-2137710-09-final.png",
+        "sha256": "86667dfbf43d043e151f766ca273b2b6a67697c5f4d9d53b9bab61546a7557f0",
+        "width": 1280,
+        "height": 797
+      },
+      "report": {
+        "path": "build/ui-ux/native-explorer/report.json",
+        "sha256": "93fcc076614628f2f78855013c9c40e9c20adbfef078a49432fb441364210c7e"
+      }
+    },
+    {
+      "journey": "search",
+      "backlogId": "UI-NATIVE-008",
+      "state": "replace-all-complete",
+      "visual": {
+        "theme": "default-dark",
+        "scale": 1,
+        "locale": "en-US",
+        "viewport": { "width": 1280, "height": 797 }
+      },
+      "requiredCheck": "replaceAllConfirmed",
+      "screenshot": {
+        "path": "build/ui-ux/native-search/20260813T144033Z-2693591-09-final.png",
+        "sha256": "db6ed98e6488f2f48069404589f08a0cfc050e7d13df02fe90fd6a73996426ae",
+        "width": 1280,
+        "height": 797
+      },
+      "report": {
+        "path": "build/ui-ux/native-search/report.json",
+        "sha256": "93713ae8ae24c2163e9d4ebd36f1760b9346e2ffe973a10fd7e8307787621982"
+      }
+    },
+    {
+      "journey": "scm",
+      "backlogId": "UI-NATIVE-009",
+      "state": "clean-working-tree-final",
+      "visual": {
+        "theme": "default-dark",
+        "scale": 1,
+        "locale": "en-US",
+        "viewport": { "width": 1280, "height": 797 }
+      },
+      "requiredCheck": "commitCreated",
+      "screenshot": {
+        "path": "build/ui-ux/native-scm/20260813T131020Z-2526116-99-final.png",
+        "sha256": "e97597ed9fe8ad4db8f6c49056b45563324ade6ee9da3ede09182402ad963edb",
+        "width": 1280,
+        "height": 797
+      },
+      "report": {
+        "path": "build/ui-ux/native-scm/report.json",
+        "sha256": "422c04861ecfc5d96c9457a3b8433ef337f81d1d19ad93d7e9e2eb5caa99ce22"
+      }
+    },
+    {
+      "journey": "debug",
+      "backlogId": "UI-NATIVE-010",
+      "state": "stopped-session-with-evaluation",
+      "visual": {
+        "theme": "default-dark",
+        "scale": 1,
+        "locale": "en-US",
+        "viewport": { "width": 1280, "height": 797 }
+      },
+      "requiredCheck": "evaluationVisible",
+      "screenshot": {
+        "path": "build/ui-ux/native-debug/20260813T131336Z-2530913-99-final.png",
+        "sha256": "f66338c8a38f9d67b42ee4a186c66454dd660281e89916e81b8354351382d38a",
+        "width": 1280,
+        "height": 797
+      },
+      "report": {
+        "path": "build/ui-ux/native-debug/report.json",
+        "sha256": "35164b0bbba813feafa8576872520fb1a02511ee722402c5ade90db31e835e61"
+      }
+    },
+    {
+      "journey": "extensions",
+      "backlogId": "UI-NATIVE-011",
+      "state": "installed-contributions-after-host-restart",
+      "visual": {
+        "theme": "default-dark",
+        "scale": 1,
+        "locale": "en-US",
+        "viewport": { "width": 1280, "height": 797 }
+      },
+      "requiredCheck": "contributionsVisible",
+      "screenshot": {
+        "path": "build/ui-ux/native-extensions/20260813T132228Z-2549897-99-final.png",
+        "sha256": "6d40c9bec3951bb06355d56282827b2ae43c10b243a137626f50ef2e979315d4",
+        "width": 1280,
+        "height": 797
+      },
+      "report": {
+        "path": "build/ui-ux/native-extensions/report.json",
+        "sha256": "671f8d6f6459e8609c7b9b175f6ad70903d71d66500fe7430db12297987da57a"
+      }
+    },
+    {
+      "journey": "settings",
+      "backlogId": "UI-NATIVE-012",
+      "state": "settings-dialog-open",
+      "visual": {
+        "theme": "default-dark",
+        "scale": 1,
+        "locale": "en-US",
+        "viewport": { "width": 1280, "height": 797 }
+      },
+      "requiredCheck": "settingsDialogAccessible",
+      "screenshot": {
+        "path": "build/ui-ux/native-settings/20260812T214821Z-1981100-12-trigger-open.png",
+        "sha256": "2e975baf4006e88ff215f29819049292547fd6c91b1e79a12d01dd4242ec468b",
+        "width": 1280,
+        "height": 797
+      },
+      "report": {
+        "path": "build/ui-ux/native-settings/report.json",
+        "sha256": "84dcba5d599c31e8ec8809ae89e171c380acb02462e292a9f29cc8d852c650d3"
+      }
+    },
+    {
+      "journey": "terminal",
+      "backlogId": "UI-NATIVE-013",
+      "state": "split-terminal-ansi-unicode-final",
+      "visual": {
+        "theme": "default-dark",
+        "scale": 1,
+        "locale": "en-US",
+        "viewport": { "width": 1278, "height": 793 }
+      },
+      "requiredCheck": "ansiUnicodeRendered",
+      "screenshot": {
+        "path": "build/ui-ux/native-terminal/20260922T085801Z-24-99-final.png",
+        "sha256": "b7cc22d4e13e73c46b7a4c1ba640190234762b995ffeda1cebecfb8a31802cfd",
+        "width": 1278,
+        "height": 793
+      },
+      "report": {
+        "path": "build/ui-ux/native-terminal/report.json",
+        "sha256": "f66477f7367bc0ea060562325af8463a6636325f38baf1b1b74ae0a0c4eeea0b"
+      }
+    }
+  ]
+}

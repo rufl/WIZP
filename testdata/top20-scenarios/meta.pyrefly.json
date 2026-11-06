@@ -1,0 +1,72 @@
+{
+  "extensionId": "meta.pyrefly",
+  "lane": "language/tooling",
+  "rank": 1,
+  "referenceHost": "MrCode",
+  "scenarios": [
+    {
+      "actions": [
+        "Open Python file",
+        "Capture output/errors",
+        "Probe bundled binary metadata"
+      ],
+      "activationEvents": [
+        "onLanguage:python"
+      ],
+      "backlogIds": [
+        "T20V-001"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "referenceResult",
+        "wizpResult",
+        "binaryMetadata",
+        "userFacingMessage",
+        "processAudit"
+      ],
+      "fixture": "fixtures/python/pyrefly-platform",
+      "id": "pyrefly-platform-classification",
+      "kind": "degraded-runtime",
+      "notes": "Current OpenVSX bundle is platform-sensitive; classify before claiming support.",
+      "runtimeModes": [
+        "bundled-binary"
+      ],
+      "settings": {},
+      "title": "Classify bundled Pyrefly platform behavior"
+    },
+    {
+      "actions": [
+        "Open Python file",
+        "Request diagnostics",
+        "Request completion/hover/code actions"
+      ],
+      "activationEvents": [
+        "onLanguage:python"
+      ],
+      "backlogIds": [
+        "T20V-002"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "diagnostics",
+        "completion",
+        "hover",
+        "codeActions",
+        "outputChannel",
+        "processAudit"
+      ],
+      "fixture": "fixtures/python/pyrefly-valid",
+      "id": "pyrefly-valid-language",
+      "kind": "valid-runtime",
+      "runtimeModes": [
+        "valid-runtime"
+      ],
+      "settings": {
+        "pyrefly.lspPath": "${fixtureTools}/pyrefly"
+      },
+      "title": "Run Pyrefly with a compatible binary override"
+    }
+  ],
+  "schema": "wizp.top20-behavior-scenario.v1",
+  "version": "1.0.9002"
+}

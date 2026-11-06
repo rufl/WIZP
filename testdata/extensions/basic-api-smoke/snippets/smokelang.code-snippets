@@ -1,0 +1,11 @@
+{
+  "Smoke Function": {
+    "prefix": "smokefn",
+    "body": [
+      "fn ${1:name}() {",
+      "  $0",
+      "}"
+    ],
+    "description": "Smoke language function snippet"
+  }
+}

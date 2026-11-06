@@ -1,0 +1,73 @@
+{
+  "extensionId": "ms-azuretools.vscode-containers",
+  "lane": "scm/cloud/remote",
+  "rank": 20,
+  "referenceHost": "MrCode",
+  "scenarios": [
+    {
+      "actions": [
+        "Open Dockerfile and compose files",
+        "Request diagnostics/completion/hover/symbols/snippets"
+      ],
+      "activationEvents": [
+        "onLanguage:dockerfile"
+      ],
+      "backlogIds": [
+        "T20V-032"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "diagnostics",
+        "completion",
+        "hover",
+        "symbols",
+        "snippets",
+        "debugMetadata",
+        "languageServerProcesses"
+      ],
+      "fixture": "fixtures/containers/dockerfile-compose",
+      "id": "containers-language-features",
+      "kind": "language-provider",
+      "runtimeModes": [
+        "valid-fixture"
+      ],
+      "settings": {},
+      "title": "Verify Dockerfile and Compose language features"
+    },
+    {
+      "actions": [
+        "List containers/images",
+        "Build/run/stop fixture",
+        "Cancel command",
+        "Run missing-Docker path"
+      ],
+      "activationEvents": [
+        "onLanguage:dockerfile"
+      ],
+      "backlogIds": [
+        "T20V-033"
+      ],
+      "currentStatus": "planned",
+      "expectedEvidence": [
+        "imageList",
+        "containerList",
+        "terminalOutput",
+        "errors",
+        "cancellation",
+        "processAudit",
+        "messages"
+      ],
+      "fixture": "fixtures/containers/docker-cli",
+      "id": "containers-docker-cli",
+      "kind": "container-runtime",
+      "runtimeModes": [
+        "valid-docker",
+        "missing-runtime"
+      ],
+      "settings": {},
+      "title": "Verify Docker CLI workflows and missing-Docker UX"
+    }
+  ],
+  "schema": "wizp.top20-behavior-scenario.v1",
+  "version": "2.4.5"
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIZP — VSCodium</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="/xterm.css" />
+    <link rel="stylesheet" href="/codicon.css" />
+    <style>
+        :root {
+            --bg: #1e1e1e;
+            --fg: #cccccc;
+            --sidebar-bg: #252526;
+            --sidebar-fg: #cccccc;
+            --activity-bar-bg: #333333;
+            --activity-bar-fg: #ffffff;
+            --activity-bar-inactive-fg: #858585;
+            --activity-bar-active-border: #ffffff;
+            --activity-bar-badge-bg: #007acc;
+            --tab-bg: #2d2d2d;
+            --tab-active-bg: #1e1e1e;
+            --tab-active-fg: #ffffff;
+            --tab-inactive-fg: #969696;
+            --tab-border: #252526;
+            --tab-active-border-top: #007acc;
+            --tab-hover-bg: #2a2d2e;
+            --editor-bg: #1e1e1e;
+            --editor-fg: #d4d4d4;
+            --editor-line-highlight: #2a2d2e;
+            --editor-selection: #264f78;
+            --editor-cursor: #ffffff;
+            --editor-line-number: #858585;
+            --editor-line-number-active: #c6c6c6;
+            --status-bar-bg: #007acc;
+            --status-bar-fg: #ffffff;
+            --status-bar-dim: #bbbbbb;
+            --status-bar-no-folder-bg: #68217a;
+            --panel-bg: #1e1e1e;
+            --panel-border: #3c3c3c;
+            --panel-tab-active-fg: #ffffff;
+            --panel-tab-inactive-fg: #969696;
+            --panel-tab-active-border: #007acc;
+            --breadcrumb-bg: #1e1e1e;
+            --breadcrumb-fg: #cccccc;
+            --breadcrumb-dim: #858585;
+            --scrollbar-bg: transparent;
+            --scrollbar-fg: #424242;
+            --scrollbar-hover: #4f4f4f;
+            --accent: #007acc;
+            --warn: #cca700;
+            --error: #f48771;
+            --info: #75beff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            height: 100%; width: 100%; overflow: hidden;
+            background: var(--bg); color: var(--fg);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            font-size: 13px; line-height: 1.4;
+            -webkit-font-smoothing: antialiased;
+            user-select: none;
+        }
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--scrollbar-fg); border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-hover); }
+        ::-webkit-scrollbar-corner { background: transparent; }
+    </style>
+</head>
+<body>
+    <script>window.MONACO_PATH = "/monaco";</script>
+    <script type="module" src="./dist/bundle.js"></script>
+</body>
+</html>

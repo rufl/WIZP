@@ -44,7 +44,7 @@ jobs:
       - name: Shell script lint
         run: |
           sudo apt-get install -y shellcheck
-          shellcheck -x scripts/*.sh
+          shellcheck -x -P scripts scripts/*.sh
 
   fuzz:
     name: Fuzz Tests

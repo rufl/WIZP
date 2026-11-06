@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-repo_root=$(CDPATH= cd -- "$(dirname "$0")/.." && pwd)
+repo_root=$(CDPATH='' cd -- "$(dirname "$0")/.." && pwd)
 isolated_display_bin="$repo_root/scripts/isolated-display-bin"
 if [ -x "$isolated_display_bin/bwrap" ]; then
     PATH="$isolated_display_bin:$PATH"

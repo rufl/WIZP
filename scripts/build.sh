@@ -18,17 +18,16 @@ WIZP_DIR="$(dirname "$SCRIPT_DIR")"
 echo ""
 echo "=== Building WIZP ==="
 
-BUILD_MODE="ReleaseSafe"
-ZIG_FLAGS="build -Doptimize=ReleaseSafe"
+ZIG_ARGS=(build -Doptimize=ReleaseSafe)
 
 if [[ "${1:-}" == "--debug" ]]; then
-    ZIG_FLAGS="build"
+    ZIG_ARGS=(build)
     shift
 fi
 
 cd "$WIZP_DIR"
-echo "Running: zig $ZIG_FLAGS"
-zig $ZIG_FLAGS
+echo "Running: zig ${ZIG_ARGS[*]}"
+zig "${ZIG_ARGS[@]}"
 
 echo "Build complete: zig-out/bin/wizp"
 

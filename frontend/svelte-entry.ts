@@ -67,10 +67,7 @@ const startupWindow = window as StartupWindow;
 
 function hasDirectoryListing(value: unknown): value is { files: unknown[] } {
   return (
-    typeof value === 'object' &&
-    value !== null &&
-    'files' in value &&
-    Array.isArray(value.files)
+    typeof value === 'object' && value !== null && 'files' in value && Array.isArray(value.files)
   );
 }
 

@@ -85,14 +85,28 @@ async function nativeControlRequest<T>(
     let detail = `Native control ${path} failed (${response.status})`;
     try {
       const payload: unknown = await response.json();
-      if (payload && typeof payload === 'object' && 'error' in payload && typeof payload.error === 'string')
+      if (
+        payload &&
+        typeof payload === 'object' &&
+        'error' in payload &&
+        typeof payload.error === 'string'
+      )
         detail = payload.error;
     } catch {}
     throw new Error(detail);
   }
   return (await response.json()) as T;
 }
-export type AgentControlRoute = 'start' | 'status' | 'events' | 'prompt' | 'cancel' | 'stop' | 'propose' | 'apply' | 'discard';
+export type AgentControlRoute =
+  | 'start'
+  | 'status'
+  | 'events'
+  | 'prompt'
+  | 'cancel'
+  | 'stop'
+  | 'propose'
+  | 'apply'
+  | 'discard';
 
 export async function agentControl(
   route: AgentControlRoute,

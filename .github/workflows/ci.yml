@@ -24,7 +24,7 @@ jobs:
       - name: Setup Zig
         uses: mlugg/setup-zig@v1
         with:
-          version: '0.17.0'
+          version: '0.17.1'
 
       - name: Install frontend dependencies
         run: cd frontend && npm ci
@@ -45,7 +45,6 @@ jobs:
         run: |
           sudo apt-get install -y shellcheck
           shellcheck scripts/*.sh
-        working-directory: ${{ github.workspace }}/wizp
 
   fuzz:
     name: Fuzz Tests
@@ -59,7 +58,7 @@ jobs:
       - name: Setup Zig
         uses: mlugg/setup-zig@v1
         with:
-          version: '0.17.0'
+          version: '0.17.1'
 
       - name: Run fuzz tests (30s budget)
         run: zig build test -Doptimize=ReleaseSafe -Dtarget=x86_64-linux-gnu -- 2>&1 | head -100
@@ -71,7 +70,7 @@ jobs:
     needs: lint
     strategy:
       matrix:
-        zig: ['0.16.0']
+        zig: ['0.17.1']
     steps:
       - uses: actions/checkout@v4
         with:
@@ -94,7 +93,6 @@ jobs:
         uses: mlugg/setup-zig@v1
         with:
           version: ${{ matrix.zig }}
-
       - name: Run tests
         run: zig build test -Doptimize=ReleaseSafe -Dtarget=x86_64-linux-gnu
 
@@ -126,8 +124,7 @@ jobs:
       - name: Setup Zig
         uses: mlugg/setup-zig@v1
         with:
-          version: '0.17.0'
-
+          version: '0.17.1'
       - name: Build ReleaseSafe
         run: zig build -Doptimize=ReleaseSafe -Dtarget=x86_64-linux-gnu
 

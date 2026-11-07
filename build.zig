@@ -2,9 +2,9 @@ const std = @import("std");
 const builtin = @import("builtin");
 
 pub fn build(b: *std.Build) void {
-    if (builtin.zig_version.major != 0 or builtin.zig_version.minor != 17 or builtin.zig_version.patch != 0) {
+    if (builtin.zig_version.major != 0 or builtin.zig_version.minor != 17) {
         std.debug.panic(
-            "WIZP requires Zig 0.17.0 (found {d}.{d}.{d}).",
+            "WIZP requires Zig 0.17.x (found {d}.{d}.{d}).",
             .{ builtin.zig_version.major, builtin.zig_version.minor, builtin.zig_version.patch },
         );
     }

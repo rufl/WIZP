@@ -6,11 +6,11 @@
     .dependencies = .{
         .zigpty = .{
             .url = "https://github.com/rufl/zigpty/archive/c3a8859.tar.gz",
-            .hash = "N-V-__8AAL7jAQByrRgbonMYHf4XSlllauXS4JfBDRUYYyJW",
+            .hash = "zigpty-0.0.0-wfmENr7jAQCNTksa5upd0sXjHiGYOvFGR0Q5J44E5TRk",
         },
         .zlay = .{
             .url = "https://github.com/rufl/ZLAY/archive/c462bf3.tar.gz",
-            .hash = "N-V-__8AAAlnLQDe1MmX82xqPR5aW8wXjn8GyUhJWevG_N3s",
+            .hash = "zlay-0.1.0-6uJQdAlnLQBsRdLUDunuK-nvP4liQSS1d9r8yOEoCzQT",
         },
     },
     .paths = .{

@@ -92,7 +92,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
-    const zigpty_dir = "zigpty-c3a8859526fb98775634b722380951d8c6bf92f3/zig";
+    const zigpty_dir = "zig";
     const zigpty_mod = b.createModule(.{
         .root_source_file = zigpty_dep.path(b.fmt("{s}/root.zig", .{zigpty_dir})),
         .target = target,
@@ -108,7 +108,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
-    const zlay_dir = "ZLAY-c462bf3defbbd4f9d1edcca7a254e933a2aa3300/src";
+    const zlay_dir = "src";
     const zlay_mod = b.createModule(.{
         .root_source_file = zlay_dep.path(b.fmt("{s}/root.zig", .{zlay_dir})),
         .target = target,
@@ -444,8 +444,9 @@ fn addSiblingImports(
         for (sources, 0..) |source, index| {
             if (index != root_index and module != modules[index]) module.addImport(source, modules[index]);
         }
-        if (module != root and std.mem.eql(u8, directory, "src")) {
-            module.addImport("zlay", root);
+        if (module != root) {
+            const dependency_name = if (std.mem.eql(u8, directory, "src")) "zlay" else "zigpty";
+            module.addImport(dependency_name, root);
         }
     }
 }

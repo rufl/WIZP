@@ -87,18 +87,44 @@ pub fn build(b: *std.Build) void {
     exe_mod.addImport("frontend_bundled", frontend_bundled_opt.createModule());
     exe_mod.addImport("runtime_paths", runtime_paths_opt.createModule());
 
-    // zigpty — modern cross-platform PTY library (recommended replacement for custom PTY code)
+    // zigpty — cross-platform PTY library
     const zigpty_dep = b.dependency("zigpty", .{
         .target = target,
         .optimize = optimize,
     });
-    exe_mod.addImport("zigpty", zigpty_dep.module("zigpty"));
+    const zigpty_dir = "zigpty-c3a8859526fb98775634b722380951d8c6bf92f3/zig";
+    const zigpty_mod = b.createModule(.{
+        .root_source_file = zigpty_dep.path(b.fmt("{s}/root.zig", .{zigpty_dir})),
+        .target = target,
+        .optimize = optimize,
+        .link_libc = true,
+    });
+    addSiblingImports(b, zigpty_mod, zigpty_dep, zigpty_dir, &.{
+        "root.zig", "common.zig", "pty_darwin.zig", "pty_linux.zig", "pty_windows.zig", "termios.zig",
+    }, 0, target, optimize);
+    exe_mod.addImport("zigpty", zigpty_mod);
 
     const zlay_dep = b.dependency("zlay", .{
         .target = target,
         .optimize = optimize,
     });
-    exe_mod.addImport("zlay", zlay_dep.module("zlay"));
+    const zlay_dir = "ZLAY-c462bf3defbbd4f9d1edcca7a254e933a2aa3300/src";
+    const zlay_mod = b.createModule(.{
+        .root_source_file = zlay_dep.path(b.fmt("{s}/root.zig", .{zlay_dir})),
+        .target = target,
+        .optimize = optimize,
+    });
+    addSiblingImports(b, zlay_mod, zlay_dep, zlay_dir, &.{
+        "types.zig",                   "widgets.zig",               "retained_reference_tests.zig",    "retained_store.zig",
+        "root.zig",                    "scroll.zig",                "text.zig",                        "text_widgets.zig",
+        "transition.zig",              "retained_layout.zig",       "layout.zig",                      "paragraph_provider.zig",
+        "profile.zig",                 "public_metadata_tests.zig", "renderer.zig",                    "facade_tests.zig",
+        "geometry.zig",                "globals.zig",               "hash.zig",                        "integration_tests.zig",
+        "interaction.zig",             "context.zig",               "debug.zig",                       "debug_inspector_tests.zig",
+        "declaration_order_tests.zig", "deep_render_tests.zig",     "exit_transition_tests.zig",       "animation.zig",
+        "audit_regression_tests.zig",  "accessibility.zig",         "allocation_discipline_tests.zig",
+    }, 4, target, optimize);
+    exe_mod.addImport("zlay", zlay_mod);
 
     if (enable_dvui) {
         addDvuiSupport(b, exe_mod, target, optimize);
@@ -230,8 +256,8 @@ pub fn build(b: *std.Build) void {
     });
     test_mod.addImport("dvui_available", dvui_available_opt.createModule());
     test_mod.addImport("tree_sitter_options", ts_options.createModule());
-    test_mod.addImport("zigpty", zigpty_dep.module("zigpty"));
-    test_mod.addImport("zlay", zlay_dep.module("zlay"));
+    test_mod.addImport("zigpty", zigpty_mod);
+    test_mod.addImport("zlay", zlay_mod);
 
     const test_exe = b.addTest(.{
         .root_module = test_mod,
@@ -390,4 +416,36 @@ fn addDvuiSupport(
 
     exe_mod.addImport("dvui", dvui_module);
     exe_mod.addImport("sdl-backend", sdl_backend_mod);
+}
+
+fn addSiblingImports(
+    b: *std.Build,
+    root: *std.Build.Module,
+    dep: *std.Build.Dependency,
+    directory: []const u8,
+    sources: []const []const u8,
+    root_index: usize,
+    target: std.Build.ResolvedTarget,
+    optimize: std.builtin.OptimizeMode,
+) void {
+    var modules: [31]*std.Build.Module = undefined;
+    if (sources.len > modules.len) @panic("dependency source list exceeds module capacity");
+    modules[root_index] = root;
+    for (sources, 0..) |source, index| {
+        if (index == root_index) continue;
+        modules[index] = b.createModule(.{
+            .root_source_file = dep.path(b.fmt("{s}/{s}", .{ directory, source })),
+            .target = target,
+            .optimize = optimize,
+            .link_libc = true,
+        });
+    }
+    for (modules[0..sources.len]) |module| {
+        for (sources, 0..) |source, index| {
+            if (index != root_index and module != modules[index]) module.addImport(source, modules[index]);
+        }
+        if (module != root and std.mem.eql(u8, directory, "src")) {
+            module.addImport("zlay", root);
+        }
+    }
 }

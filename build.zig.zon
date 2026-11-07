@@ -5,11 +5,12 @@
     .minimum_zig_version = "0.17.0",
     .dependencies = .{
         .zigpty = .{
-            .url = "https://github.com/pithings/zigpty/archive/60a6002851bbe489ca48c3b1964be34d36e04173.tar.gz",
-            .hash = "zigpty-0.0.0-wfmENlDkAQC7XCLW8R5HLMiVubZjV3Brq1lcA_vATIIU",
+            .url = "https://github.com/rufl/zigpty/archive/c3a8859.tar.gz",
+            .hash = "N-V-__8AAL7jAQByrRgbonMYHf4XSlllauXS4JfBDRUYYyJW",
         },
         .zlay = .{
-            .path = "../../../libraries/ZLAY",
+            .url = "https://github.com/rufl/ZLAY/archive/c462bf3.tar.gz",
+            .hash = "N-V-__8AAAlnLQDe1MmX82xqPR5aW8wXjn8GyUhJWevG_N3s",
         },
     },
     .paths = .{

@@ -3,6 +3,7 @@
 ## [Unreleased] — 2026-07-18
 
 ### Added
+- Updated WIZP's public ZLAY and zigpty dependencies for Zig 0.17 module graphs; imported sibling source modules explicitly and separated zigpty's shared platform types from backend modules to avoid cyclic imports.
 - Kept build-time Bun selection separate from runtime Bun lookup so Windows cross-packages do not probe the Linux build-host executable path; Windows Bun lookup now uses `.exe` names and `;`-separated `PATH`.
 - Reused layout-stable inline validation in Explorer create and rename dialogs; valid edits clear validation errors without hiding backend failures.
 - Added determinate extension-task progress from reported increments, with an indeterminate state when progress is unknown.

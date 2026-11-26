@@ -30,6 +30,7 @@
     "report:dependency-updates": "python3 scripts/dependency_update_report.py",
     "report:release-artifacts": "python3 scripts/release_artifact_report.py",
     "test:package-audit": "python3 -m unittest scripts/test_package_self_contained_audit.py",
+    "test:cef-payload-equivalence": "python3 -m unittest scripts/test_cef_payload_equivalence.py",
     "test:top20-utils": "python3 scripts/test_top20_parity_utils.py",
     "test:top20-status": "python3 scripts/test_top20_scenario_status.py",
     "test:top20-paths": "python3 scripts/test_top20_artifact_paths.py",

@@ -81,6 +81,56 @@ release-shaped Linux package is 682.3 MiB installed after atomic ELF stripping.
 CEF remains bundled; `build/parity-package/linux-package-prune.json` records the
 package size and stripping/locale savings.
 
+### CEF runtime and EuroOffice
+
+WIZP's Linux package is intentionally self-contained. Electrobun 1.18.1's
+Linux CEF payload is CEF `147.0.10+gd58e84d` / Chromium `147.0.7727.118`,
+stored under `bin/cef`; Electrobun also copies selected libraries/resources
+beside the launcher and ships its own `process_helper`, native wrapper, Bun,
+and app resources. Electrobun's `bundleCEF` switch selects bundled CEF versus
+the host-native renderer; `cefVersion` selects an Electrobun CEF build. Neither
+configures an arbitrary external CEF root. WIZP therefore has no supported
+shared-runtime mode.
+
+We compared the installed Electrobun CEF input with EuroOffice's published
+`eurooffice/v9.3.8-dinx5` package (package SHA-256
+`15a85ddd69ffb1009a462e9d4ca77975a7d97c6e83351ac2315999d1a92ad97b`).
+EuroOffice's release metadata identifies the upstream 9.3.8 Debian payload
+SHA-256 as `1816c4cd5d5806b757468c3dc57ec76c23acd1ea0852d441e50d6a549d217da1`;
+its metadata does not state the embedded CEF version. Comparing the actual
+published package files shows different CEF binaries and resources:
+
+| File | WIZP Electrobun 1.18.1 input SHA-256 | EuroOffice 9.3.8-5 SHA-256 |
+| --- | --- | --- |
+| `libcef.so` | `5f72fd935d77dad7c21c70ce88528fcfceeb3fdc023b2e1f14585201176cd651` (ELF Build ID `8a4b59047a9905a0f36bc98e0caf4b66698574ec`) | `b86edf848d4c18c70d76eba7bcce766d2f5d735ac56effeb11fcf4ee47771689` (ELF Build ID `464d364bd6d0b7a2fe5f0c6663ee1e238ad858f2`) |
+| `icudtl.dat` | `1cf67874b5a87a8363a86fb3f81e3cbbed54d389062dab8fb52308d5cf8c8612` | `97b978a19edd4746e9a44d9a44bb4bc519e127a203c247837ec0922f573449e3` |
+| `resources.pak` | `88a6819d93c69108735923df202d5cd3c7295279f1e52e64ebd074ca7b78fbde` | `0c22a7412231d3cfda1663e9a1815a2d1f9f311322946669a3e2240010cc2e7d` |
+| `v8_context_snapshot.bin` | `b456736ed60b392948cc31f705b87506363de03c739c6ede05d747021f30b729` | `474eccca3a12af4f6a37409b02dd9e8004f6675b519581d26900f759d9244a6a` |
+| `snapshot_blob.bin` | Not present in Electrobun 1.18.1 Linux CEF input | `76a8cd79ae104dc59a3390cc852c8a8b6bb057ee38dcc40903ea427475740d56` |
+
+The WIZP `libcef.so` hash is the Electrobun dependency input; DINX package
+pruning strips ELF files, so its final installed hash can differ. EuroOffice's
+hash is from its stripped published package. The different build IDs and
+resource hashes establish non-identical runtime contents despite strip-state
+differences. EuroOffice also trims its packaged CEF locale set.
+
+SquashFS deduplicates identical file contents, but it cannot deduplicate these
+different binaries/resources. WIZP keeps its bundled runtime; no symlinks or
+external paths are introduced.
+
+For a future candidate, compare the exact package trees without changing
+either application:
+
+```bash
+python3 scripts/check_cef_payload_equivalence.py \\
+  /path/to/WIZP-dev /opt/eurooffice
+```
+
+The probe prints per-file hashes and missing/mismatched payload paths. A
+byte-identical payload is necessary, not sufficient, for runtime sharing; the
+probe does not validate ABI, loader/subprocess behavior, or external-runtime
+support. WIZP remains self-contained regardless of probe result.
+
 ## Architecture
 
 ```
